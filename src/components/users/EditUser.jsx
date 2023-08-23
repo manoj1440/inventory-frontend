@@ -15,7 +15,7 @@ const EditUser = ({ user, onCancel, editModalVisible, fetchUsers }) => {
             const response = await api.request('put', `/api/user/${user._id}`, values);
             console.log('User edited:', response);
             onCancel();
-            fetchUsers(pagination.current, pagination.pageSize);
+            fetchUsers();
         } catch (error) {
             console.error('Error editing user:', error);
         }

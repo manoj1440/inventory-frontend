@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Pagination, Modal, Space, Button } from 'antd';
 import api from '../../utils/api';
 import EditUser from './EditUser';
+import AddUserForm from './AddUser';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -13,6 +14,7 @@ const Users = () => {
 
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editUserData, setEditUserData] = useState({});
+    const [isAddModal, setIsAddModal] = useState(false)
 
 
     useEffect(() => {
@@ -116,6 +118,11 @@ const Users = () => {
 
     return (
         <div>
+            <Button
+            style={{ marginBottom: 10 }}
+            onClick={() => setIsAddModal(true)} type="primary">
+                Add User
+            </Button>
             <Table
                 dataSource={users}
                 columns={columns}
@@ -134,6 +141,10 @@ const Users = () => {
                 editModalVisible={editModalVisible}
                 user={...editUserData}
                 onCancel={handleEditModalClose} />
+            <AddUserForm
+                isAddModal={isAddModal}
+                fetchUsers={fetchUsers}
+                onCancel={setIsAddModal} />
         </div>
     );
 };

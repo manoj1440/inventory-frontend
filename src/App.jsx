@@ -4,6 +4,7 @@ import AppLayout from './components/common/AppLayout';
 import Login from './components/login/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import Users from './components/users/Users';
+import Panels from './components/panels/Panels';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="users" element={<Users />} />
+          <Route path="panels" element={<Panels />} />
         </Route>
       </Routes>
     </Router>
