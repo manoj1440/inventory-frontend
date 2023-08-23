@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Pagination, Modal, Space, Button } from 'antd';
 import api from '../../utils/api';
+import EditUser from './EditUser';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -9,14 +10,16 @@ const Users = () => {
         pageSize: 10,
         total: 0,
     });
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedUserId, setSelectedUserId] = useState(null);
+
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [editUserData, setEditUserData] = useState({});
+
 
     useEffect(() => {
         fetchUsers(pagination.current, pagination.pageSize);
     }, [pagination.current, pagination.pageSize]);
 
-    const fetchUsers = async (page, pageSize) => {
+    const fetchUsers = async (page = pagination.current, pageSize = pagination.pageSize) => {
         try {
             const startIndex = (page - 1) * pageSize;
             const endIndex = startIndex + pageSize;
@@ -40,13 +43,15 @@ const Users = () => {
         setPagination({ ...pagination, current: page, pageSize });
     };
 
-    const showModal = (userId) => {
-        setSelectedUserId(userId);
-        setModalVisible(true);
+
+    const showEditModal = (record) => {
+        setEditUserData(record);
+        setEditModalVisible(true);
     };
 
-    const handleEditUser = (userId) => {
-        showModal(userId);
+    const handleEditModalClose = () => {
+        setEditModalVisible(false);
+        setEditUserData({});
     };
 
     const handleDeleteUser = (userId) => {
@@ -98,7 +103,7 @@ const Users = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => handleEditUser(record)} type="primary">
+                    <Button onClick={() => showEditModal(record)} type="primary">
                         Edit
                     </Button>
                     <Button onClick={() => handleDeleteUser(record._id)} type="danger">
@@ -124,16 +129,11 @@ const Users = () => {
                 total={pagination.total}
                 onChange={handlePaginationChange}
             />
-            <Modal
-                title="Edit User"
-                visible={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                footer={null}
-            >
-                {/* Render your edit form or component here */}
-                {/* You can pass selectedUserId to the edit form/component */}
-                <p>Edit user with ID: {selectedUserId}</p>
-            </Modal>
+            <EditUser
+                fetchUsers={fetchUsers}
+                editModalVisible={editModalVisible}
+                user={...editUserData}
+                onCancel={handleEditModalClose} />
         </div>
     );
 };
