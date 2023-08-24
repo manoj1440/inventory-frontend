@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Modal } from 'antd';
+import { Form, Input, Button, Modal, Select } from 'antd';
 import api from '../../utils/api';
 
 const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }) => {
@@ -25,6 +25,12 @@ const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }
             <Form form={form} onFinish={onFinish} layout="vertical">
                 <Form.Item label="Serial Number" name="serialNumber" initialValue={panel.serialNumber}>
                     <Input />
+                </Form.Item>
+                <Form.Item label="Included in Batch" name="included" initialValue={panel.included}>
+                    <Select placeholder="Select an option">
+                        <Select.Option value={true}>Yes</Select.Option>
+                        <Select.Option value={false}>No</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">

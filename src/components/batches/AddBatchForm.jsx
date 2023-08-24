@@ -1,72 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Select, Button } from 'antd';
+import { Modal, Form, Input, Select, Button, DatePicker } from 'antd';
 import api from '../../utils/api';
-import Panels from '../panels/Panels';
 
-const AddBatchForm = ({ onCancel, isAddModal, fetchPanels }) => {
+const AddBatchForm = ({ onCancel, isAddModal, fetchBatches }) => {
     const [form] = Form.useForm();
-    const [userPanelList, setUserPanelList] = useState({
-        users: [],
-        panels: []
-    });
+    const [userList, setUserList] = useState([]);
+    const [panelList, setPanelList] = useState([]);
 
     useEffect(() => {
-        let newArray = []
         api.request('get', '/api/user')
             .then((res) => {
-
                 const { data } = res;
-                newArray = data.map((v, i) => {
-                    return v.name
-                })
-                console.log("=====", newArray);
-                setUserPanelList({ ...userPanelList, users: newArray })
-
-            })
-        api.request('get', '/api/panel')
+                setUserList(data);
+            });
+        api.request('get', '/api/panel/batch')
             .then((res) => {
-
                 const { data } = res;
-                let newArray1 = data.map((v, i) => {
-                    return v.serialNumber
-                })
-                console.log("=====", newArray);
-                setUserPanelList({ ...userPanelList, panels: newArray1, users: newArray })
-            })
-    }, [])
-
-    console.log("userPanelList===", userPanelList);
+                setPanelList(data);
+            });
+    }, []);
 
     const onFinish = async (values) => {
         try {
-            console.log("=====", values)
             const response = await api.request('post', `/api/batch`, values);
             onCancel(false);
-            fetchPanels();
+            fetchBatches();
         } catch (error) {
-            console.error('Error adding Panel:', error);
+            console.error('Error adding batch:', error);
         }
     };
 
     return (
         <Modal
-            title="Add Panel"
+            title="Add Batch"
             open={isAddModal}
             onCancel={() => onCancel(false)}
             footer={null}
         >
             <Form form={form} onFinish={onFinish} layout="vertical">
-                <Form.Item label="AssetNumber" name="assetNumber" rules={[{ required: true, message: 'Please enter a AssetNumber' }]}>
+                <Form.Item label="AssetNumber" name="AssetNumber" rules={[{ required: true, message: 'Please enter an AssetNumber' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="quantity" name="quantity" rules={[{ required: true, message: 'Please enter a quantity' }]}>
-                    <Input />
+                <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Please enter a quantity' }]}>
+                    <Input type="number" />
                 </Form.Item>
                 <Form.Item label="PCM" name="PCM" rules={[{ required: true, message: 'Please enter a PCM' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="DOM" name="DOM" rules={[{ required: true, message: 'Please enter a DOM' }]}>
-                    <Input />
+                <Form.Item label="DOM" name="DOM" rules={[{ required: true, message: 'Please select a DOM' }]}>
+                    <DatePicker />
                 </Form.Item>
                 <Form.Item label="WhLocation" name="WhLocation" rules={[{ required: true, message: 'Please enter a WhLocation' }]}>
                     <Input />
@@ -74,17 +56,14 @@ const AddBatchForm = ({ onCancel, isAddModal, fetchPanels }) => {
                 <Form.Item label="DeliveryLocation" name="DeliveryLocation" rules={[{ required: true, message: 'Please enter a DeliveryLocation' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="User" name="user" rules={[{ required: true, message: 'Please enter a user' }]}>
+                <Form.Item label="User" name="user" rules={[{ required: true, message: 'Please select a user' }]}>
                     <Select mode="tags" style={{ width: '100%' }} placeholder="Select or type user">
-                        {/* Pass user.location as initial value for multi-select chips */}
-                        {userPanelList.users.map(loc => <Select.Option key={loc} value={loc}>{loc}</Select.Option>)}
+                        {userList.map(item => <Select.Option key={item._id} value={item._id}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>
-               
-                <Form.Item label="Panel" name="panel" rules={[{ required: true, message: 'Please enter a panel' }]}>
-                    <Select>
-                        {userPanelList.panels.map(loc => <Select.Option value={loc}>{loc}</Select.Option>)}
-
+                <Form.Item label="Panel" name="panels" rules={[{ required: true, message: 'Please select panels' }]}>
+                    <Select mode="tags" style={{ width: '100%' }} placeholder="Select or type panels">
+                        {panelList.map(item => <Select.Option key={item._id} value={item._id}>{item.serialNumber}</Select.Option>)}
                     </Select>
                 </Form.Item>
                 <Form.Item>

@@ -44,7 +44,12 @@ const Panels = () => {
             dataIndex: 'serialNumber',
             key: 'serialNumber',
         },
-
+        {
+            title: 'Included in Batch',
+            dataIndex: 'included',
+            key: 'included',
+            render: (included) => `${included ? 'Yes' : 'No'}`,
+        },
         {
             title: 'Actions',
             dataIndex: '_id',
