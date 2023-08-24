@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
-import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined,
-} from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+
 import { Layout, Menu, Button, theme } from 'antd';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AppSidebar from './AppSidebar';
 import { Footer } from 'antd/es/layout/layout';
-const { Header, Sider, Content } = Layout;
+
+import Cookies from 'js-cookie';
+import AppHeader from './AppHeader';
+const { Content } = Layout;
 const AppLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
-    const { token: { colorBgContainer }, } = theme.useToken();
+    const { token: { colorBgContainer } } = theme.useToken();
 
     const location = useLocation();
+    const navigate = useNavigate();
     const isLoginPage = location.pathname === '/login';
+
+    useEffect(() => {
+        const tokenJs = Cookies.get('token');
+        if (tokenJs && isLoginPage) {
+            navigate('/dashboard');
+        }
+
+        if (!tokenJs && !isLoginPage) {
+            navigate('/login');
+            localStorage.clear();
+        }
+    }, [isLoginPage, navigate, location]);
 
     if (isLoginPage) {
         return <Outlet />;
@@ -29,23 +39,12 @@ const AppLayout = () => {
 
             <AppSidebar setCollapsed={setCollapsed} collapsed={collapsed} />
             <Layout>
-                <Header
-                    style={{
-                        padding: 0,
-                        background: colorBgContainer,
-                    }}
-                >
-                    <Button
-                        type="text"
-                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: '16px',
-                            width: 64,
-                            height: 64,
-                        }}
-                    />
-                </Header>
+                <AppHeader
+                    colorBgContainer={colorBgContainer}
+                    setCollapsed={setCollapsed}
+                    collapsed={collapsed}
+                />
+
                 <Content
                     style={{
                         margin: '24px 16px',

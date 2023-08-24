@@ -1,124 +1,71 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 import api from "../../utils/api";
+import { Button, Card, Form, Input } from "antd";
+import Title from "antd/es/typography/Title";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [form] = Form.useForm();
     const [err, setErr] = useState("");
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        if (!email || !password) {
+    const handleLogin = (values) => {
+        if (!values.email || !values.password) {
             setErr("Please fill in both email and password.");
             return;
         }
-        api.request('post', '/api/login', {
-            email: email,
-            password: password
-        })
+        api.request('post', '/api/login', values)
             .then((response) => {
-                if ( !response.status) {
+                if (!response.status) {
                     setErr(response.message);
                 } else {
                     setErr(null);
                 }
-
-                if ( response.status) {
+                if (response.status) {
+                    localStorage.setItem('user', JSON.stringify(response.data));
                     console.log(response, "loginresponse")
-                    navigate("/");
+                    navigate("/dashboard");
+                    form.resetFields();
                 }
             })
             .catch((err) => console.log(err));
     };
 
     return (
-        <>
-            <div className="login-page">
-                <div className="background"></div>
-                <div className="login-box">
-                    <div className="box-content">
-                        <div className="left-content">
-                            <div>
-                                image here
-                            </div>
-                            <h2>Login</h2>
-                            <Form>
-
-                                {err && <p className="text-danger">{err}</p>}
-                                <Form.Group className="mb-3" controlId="email">
-                                    <Form.Label style={{ textAlignLast: 'left' }}>Email</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="Enter your email"
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="password">
-                                    <Form.Label style={{ textAlignLast: 'left' }}>Password</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        placeholder="Enter your password"
-                                    />
-                                </Form.Group>
-                                <Button variant="primary" onClick={handleLogin}>
-                                    Login
-                                </Button>
-                            </Form>
-
-                        </div>
-                        <div className="right-content">
-                            Powered By INFYU LABS
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* <Container className="d-flex align-items-center justify-content-center" style={{
-             minHeight: '100vh',
-             minWidth: '100vw',
-           }}>
-             <Row style={{
-               minHeight: '35vh',
-               minWidth: '35vw',
-               backgroundColor: "red",
-               placeContent: "center"
-             }}>
-               <Col xs={12} md={6}>
-                 <Form>
-                   <h2>Login</h2>
-                   {err && <p className="text-danger">{err}</p>}
-                   <Form.Group className="mb-3" controlId="email">
-                     <Form.Label>Email</Form.Label>
-                     <Form.Control
-                       type="email"
-                       value={email}
-                       onChange={(e) => setEmail(e.target.value)}
-                       placeholder="Enter your email"
-                     />
-                   </Form.Group>
-                   <Form.Group className="mb-3" controlId="password">
-                     <Form.Label>Password</Form.Label>
-                     <Form.Control
-                       type="password"
-                       value={password}
-                       onChange={(e) => setPassword(e.target.value)}
-                       placeholder="Enter your password"
-                     />
-                   </Form.Group>
-                   <Button variant="primary" onClick={handleLogin}>
-                     Login
-                   </Button>
-                 </Form>
-               </Col>
-             </Row>
-           </Container> */}
-        </>
+        <div className="login-page">
+            <Card className="login-card">
+                <Title level={2}>Login</Title>
+                <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={handleLogin}>
+                    <Form.Item
+                        name="email"
+                        rules={[
+                            { required: true, message: 'Please input your email!' },
+                            { type: 'email', message: 'Please enter a valid email!' }
+                        ]}
+                    >
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                    </Form.Item>
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'Please input your Password!' }]}
+                    >
+                        <Input
+                            prefix={<LockOutlined className="site-form-item-icon" />}
+                            type="password"
+                            placeholder="Password"
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">
+                            Log in
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+        </div>
     );
 };
 

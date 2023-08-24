@@ -8,8 +8,7 @@ const AddPanelForm = ({ onCancel, isAddModal, fetchPanels }) => {
     const onFinish = async (values) => {
         try {
             const response = await api.request('post', `/api/panel`, values);
-            console.log('Panel Added:', response);
-            onCancel();
+            onCancel(false);
             fetchPanels();
         } catch (error) {
             console.error('Error adding Panel:', error);

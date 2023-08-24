@@ -17,8 +17,6 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
     const handleMenuClick = ({ key }) => {
         navigate(key);
     };
-
-    // Define menu items
     const menuItems = [
         {
             key: '/dashboard',
@@ -44,21 +42,19 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
 
     return (
         <Sider
-            style={{ padding: '10px' }}
-            width={265}
+            style={{ padding: '10px', background: 'white', borderRight: '1px solid #e2e2e2' }}
+            width={300}
             breakpoint="lg"
             onCollapse={(collapsed, type) => {
                 setCollapsed(collapsed);
             }}
             collapsed={collapsed}>
-            <div style={{ margin: '80px' }} className="demo-logo-vertical">
-                {/* <Image preview={false} src={logo} /> */}
+            <div onClick={() => navigate('/dashboard')} className="logo">
+                <img src={logo} alt="Logo" />
             </div>
             <Menu
                 onClick={handleMenuClick}
                 style={{ fontSize: '1rem' }}
-                theme="dark"
-                mode="inline"
                 defaultSelectedKeys={[location.pathname]} // Set default based on current route
             >
                 {menuItems.map((item) => (

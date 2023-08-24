@@ -1,21 +1,25 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Button } from 'antd';
+import api from '../../utils/api';
 
-const AddUserForm = ({ onCancel, editModalVisible, fetchUsers }) => {
+const AddUserForm = ({ onCancel, isAddModal, fetchUsers }) => {
     const [form] = Form.useForm();
 
-    const onFinish = (values) => {
-        const locationArray = values.location.split(',');
-        const newUser = { ...values, location: locationArray };
-        onSubmit(newUser);
-        form.resetFields();
+    const onFinish = async (values) => {
+        try {
+            const response = await api.request('post', `/api/user`, values);
+            onCancel(false);
+            fetchUsers();
+        } catch (error) {
+            console.error('Error adding User:', error);
+        }
     };
 
     return (
         <Modal
             title="Add User"
-            open={visible}
-            onCancel={onCancel}
+            open={isAddModal}
+            onCancel={() => onCancel(false)}
             footer={null}
         >
             <Form form={form} onFinish={onFinish} layout="vertical">
