@@ -5,6 +5,7 @@ import Login from './components/login/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import Users from './components/users/Users';
 import Panels from './components/panels/Panels';
+import Batches from './components/batches/Batches';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="*" element={<Navigate to="dashboard" />} />
           <Route path="login" element={<Login />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="batches" element={<Batches />} />
           <Route path="users" element={<Users />} />
           <Route path="panels" element={<Panels />} />
         </Route>
