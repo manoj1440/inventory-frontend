@@ -35,11 +35,6 @@ const DashboardPage = () => {
       key: 'name',
     },
     {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-    },
-    {
       title: 'Batches Assigned',
       dataIndex: 'batchesCreated',
       key: 'batchesCreated',
