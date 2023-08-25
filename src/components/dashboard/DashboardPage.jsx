@@ -42,7 +42,7 @@ const DashboardPage = () => {
 
   return (
     <div className="dashboard-page">
-      <h1 className="dashboard-title">Dashboard</h1>
+      <h1 className="dashboard-title">Statistics</h1>
       {dashboardData && (
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={6}>
@@ -85,6 +85,7 @@ const DashboardPage = () => {
       )}
       {dashboardData && dashboardData.userOverview && dashboardData.userOverview.length > 0 && (
         <div className="user-overview-table">
+          <h2>Customers Info </h2>
           <Table
             dataSource={userOverviewDataSource}
             columns={userOverviewColumns}
