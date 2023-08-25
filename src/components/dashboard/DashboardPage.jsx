@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Statistic } from 'antd';
+import { Row, Col, Card, Statistic, Table } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import './DashboardPage.css'; // Import your custom styles
 import api from '../../utils/api';
 
 const DashboardPage = () => {
   const [dashboardData, setDashboardData] = useState({});
+  const [userOverviewDataSource, setUserOverviewDataSource] = useState([]);
 
   const fetchDashboard = async () => {
     try {
       const response = await api.request('get', '/api/dashboard');
       setDashboardData(response.data);
+      const formattedUserOverview = response.data.userOverview.map(user => ({
+        key: user._id,
+        name: user.name,
+        role: user.role,
+        batchesCreated: user.numBatchesCreated,
+      }));
+      setUserOverviewDataSource(formattedUserOverview);
     } catch (error) {
       console.error('Error fetching dashboardData:', error);
     }
@@ -19,6 +27,24 @@ const DashboardPage = () => {
   useEffect(() => {
     fetchDashboard();
   }, []);
+
+  const userOverviewColumns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+    },
+    {
+      title: 'Batches Assigned',
+      dataIndex: 'batchesCreated',
+      key: 'batchesCreated',
+    },
+  ];
 
   return (
     <div className="dashboard-page">
@@ -46,8 +72,8 @@ const DashboardPage = () => {
           <Col xs={24} sm={12} md={6}>
             <Card className="dashboard-card card-orange">
               <Statistic
-                title="Total Sent Batches"
-                value={dashboardData.totalSentBatches}
+                title="Total Panels In Batch"
+                value={dashboardData.totalPanelsInBatch}
                 valueStyle={{ fontSize: '2rem' }}
               />
             </Card>
@@ -55,28 +81,24 @@ const DashboardPage = () => {
           <Col xs={24} sm={12} md={6}>
             <Card className="dashboard-card card-purple">
               <Statistic
-                title="Total Unscheduled Batches"
-                value={dashboardData.totalUnscheduledBatches}
+                title="Total Received Batches"
+                value={dashboardData.totalReceivedBatches}
                 valueStyle={{ fontSize: '2rem' }}
               />
             </Card>
           </Col>
         </Row>
       )}
-      {dashboardData &&dashboardData.userOverview && dashboardData.userOverview.length>0 && (
-        <Row gutter={[16, 16]} className="user-overview-row">
-          {dashboardData.userOverview.map(user => (
-            <Col key={user._id} xs={24} sm={12} md={8} lg={6}>
-              <Card className="user-overview-card">
-                <UserOutlined className="user-icon" />
-                <h3 className="user-role">{user.role}</h3>
-                <p className="user-stat">
-                  Batches Created: {user.numBatchesCreated}
-                </p>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+      {dashboardData && dashboardData.userOverview && dashboardData.userOverview.length > 0 && (
+        <div className="user-overview-table">
+          <Table
+            dataSource={userOverviewDataSource}
+            columns={userOverviewColumns}
+            pagination={{
+              pageSize: 6,
+              hideOnSinglePage: true,
+            }} />
+        </div>
       )}
     </div>
   );

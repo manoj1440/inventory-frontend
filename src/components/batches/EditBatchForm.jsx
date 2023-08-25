@@ -17,13 +17,26 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
         api.request('get', '/api/panel/batch')
             .then((res) => {
                 const { data } = res;
-                setPanelList(data);
+                const mergedPanels = [...editBatchData.panels, ...data].reduce((acc, panel) => {
+                    if (!acc.some(item => item._id === panel._id)) {
+                        acc.push(panel);
+                    }
+                    return acc;
+                }, []);
+                setPanelList(mergedPanels);
             });
     }, []);
 
     const onFinish = async (values) => {
         try {
-            const response = await api.request('put', `/api/batch/${editBatchData._id}`, values);
+            const newDiffPanels = editBatchData.panels
+                .filter(panel => !values.panels.includes(panel._id))
+                .map(panel => panel._id);
+            const payload = {
+                ...values,
+                diffPanels: newDiffPanels,
+            };
+            const response = await api.request('put', `/api/batch/${editBatchData._id}`, payload);
             onCancel(false);
             fetchBatches();
         } catch (error) {
@@ -77,7 +90,8 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                 </Form.Item>
                 <Form.Item label="Panel" name="panels" initialValue={editBatchData.panels.map(panel => panel._id)} rules={[{ required: true, message: 'Please select panels' }]}>
                     <Select mode="tags" style={{ width: '100%' }} placeholder="Select or type panels">
-                        {panelList.map(item => <Select.Option disabled={true} key={item._id} value={item._id}>{item.serialNumber}</Select.Option>)}
+                        {panelList.map(item => <Select.Option
+                            key={item._id} value={item._id}>{item.serialNumber}</Select.Option>)}
                     </Select>
                 </Form.Item>
                 <Form.Item>

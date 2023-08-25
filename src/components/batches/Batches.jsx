@@ -84,6 +84,12 @@ const Batches = () => {
             render: (received) => received ? 'Yes' : 'No',
         },
         {
+            title: 'Total Panels',
+            dataIndex: 'panels',
+            key: 'panels',
+            render: (panels) => panels.length,
+        },
+        {
             title: 'WhLocation',
             dataIndex: 'WhLocation',
             key: 'WhLocation',
@@ -102,7 +108,7 @@ const Batches = () => {
                     title="Users"
                     trigger="hover"
                 >
-                    <Button type="link">View Users</Button>
+                    <div className='table-rendor-button'>View Users</div>
                 </Popover>
             ),
         },
@@ -115,7 +121,7 @@ const Batches = () => {
                     title="Panels"
                     trigger="hover"
                 >
-                    <Button type="link">View Panels</Button>
+                    <div className='table-rendor-button'>View Panels</div>
                 </Popover>
             ),
         },

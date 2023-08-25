@@ -110,3 +110,21 @@ button:focus-visible {
   max-width: 100%;
   max-height: 100%;
 }
+
+.table-rendor-button {
+  padding: 5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.table-rendor-button:hover {
+  border-color: aquamarine;
+  color: brown;
+}
+
+.ant-table-thead th {
+  text-transform: capitalize !important;
+  font-weight: bold;
+}

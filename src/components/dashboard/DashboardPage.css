@@ -28,19 +28,19 @@
 }
 
 .card-blue {
-  background: linear-gradient(135deg, #3498db, #2c3e50);
+  background: linear-gradient(135deg, #d5e7ff, #bcd8ff);
 }
 
 .card-green {
-  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  background: linear-gradient(135deg, #d7f9d0, #b9f6b8);
 }
 
 .card-orange {
-  background: linear-gradient(135deg, #e67e22, #d35400);
+  background: linear-gradient(135deg, #ffe0b2, #ffc08a);
 }
 
 .card-purple {
-  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  background: linear-gradient(135deg, #e8d4f8, #d5aaff);
 }
 
 .dashboard-user-card {
