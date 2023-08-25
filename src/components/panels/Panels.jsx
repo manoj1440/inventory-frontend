@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Pagination, Space, Button, Modal } from 'antd';
+import { Space, Button, Modal } from 'antd';
 import api from '../../utils/api';
 import EditPanel from './EditPanel';
 import AddPanelForm from './AddPanelForm';
@@ -60,7 +60,7 @@ const Panels = () => {
             title: 'DOE',
             dataIndex: 'DOE',
             key: 'DOE',
-            render: (DOE) => DOE ?readableDate(DOE) : 'NA',
+            render: (DOE) => DOE ? readableDate(DOE) : 'NA',
         },
         {
             title: 'Batch Name',

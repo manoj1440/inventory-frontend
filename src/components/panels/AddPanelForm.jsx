@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input, Select, Button, DatePicker } from 'antd';
+import { Modal, Form, Input, Button, DatePicker } from 'antd';
 import api from '../../utils/api';
 
 const AddPanelForm = ({ onCancel, isAddModal, fetchPanels }) => {

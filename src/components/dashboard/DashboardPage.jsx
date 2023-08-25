@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Statistic, Table } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import './DashboardPage.css'; // Import your custom styles
+import './DashboardPage.css'; 
 import api from '../../utils/api';
 
 const DashboardPage = () => {

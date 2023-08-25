@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Select, Button, Tag } from 'antd';
+import { Modal, Form, Input, Button, Tag } from 'antd';
 import api from '../../utils/api';
 import { PlusOutlined } from '@ant-design/icons';
 

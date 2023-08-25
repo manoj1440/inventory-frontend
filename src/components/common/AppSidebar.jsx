@@ -3,10 +3,11 @@ import { Layout, Menu } from 'antd';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import {
-    UploadOutlined,
     UserOutlined,
-    VideoCameraOutlined,
-    UsergroupDeleteOutlined
+    UsergroupDeleteOutlined,
+    GroupOutlined,
+    AreaChartOutlined,
+    SlidersOutlined 
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -21,17 +22,17 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
     const menuItems = [
         {
             key: '/dashboard',
-            icon: <UserOutlined style={{ fontSize: '1rem' }} />,
+            icon: <AreaChartOutlined  style={{ fontSize: '1rem' }} />,
             label: 'Dashboard',
         },
         {
             key: '/batches',
-            icon: <VideoCameraOutlined style={{ fontSize: '1rem' }} />,
+            icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
             label: 'Batches',
         },
         {
             key: '/panels',
-            icon: <UploadOutlined style={{ fontSize: '1rem' }} />,
+            icon: <SlidersOutlined  style={{ fontSize: '1rem' }} />,
             label: 'Panels',
         },
         {
