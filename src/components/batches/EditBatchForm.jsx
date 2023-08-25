@@ -9,7 +9,7 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
     const [panelList, setPanelList] = useState([]);
 
     useEffect(() => {
-        api.request('get', '/api/user')
+        api.request('get', '/api/user/customer')
             .then((res) => {
                 const { data } = res;
                 setUserList(data);
@@ -54,9 +54,6 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
             <Form form={form} onFinish={onFinish} layout="vertical">
                 <Form.Item label="AssetNumber" name="AssetNumber" initialValue={editBatchData.AssetNumber} rules={[{ required: true, message: 'Please enter an AssetNumber' }]}>
                     <Input />
-                </Form.Item>
-                <Form.Item label="Quantity" name="quantity" initialValue={editBatchData.quantity} rules={[{ required: true, message: 'Please enter a quantity' }]}>
-                    <Input type="number" />
                 </Form.Item>
                 <Form.Item label="PCM" name="PCM" initialValue={editBatchData.PCM} rules={[{ required: true, message: 'Please enter a PCM' }]}>
                     <Input />

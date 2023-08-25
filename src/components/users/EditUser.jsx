@@ -38,12 +38,6 @@ const EditUser = ({ user, onCancel, editModalVisible, fetchUsers }) => {
                 <Form.Item label="Contact" name="contact" rules={[{ required: true, message: 'Please enter a contact number' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="Location" name="location" rules={[{ required: true, message: 'Please enter a location' }]}>
-                    <Select mode="tags" style={{ width: '100%' }} placeholder="Select or type locations">
-                        {/* Pass user.location as initial value for multi-select chips */}
-                        {user.location && user.location.split(',') && user.location.split(',').map(loc => <Select.Option key={loc} value={loc}>{loc}</Select.Option>)}
-                    </Select>
-                </Form.Item>
                 <Form.Item label="Role" name="role" rules={[{ required: true, message: 'Please select a role' }]}>
                     <Select>
                         <Select.Option value="admin">Admin</Select.Option>

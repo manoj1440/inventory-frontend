@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input, Select, Button } from 'antd';
+import { Modal, Form, Input, Select, Button, DatePicker } from 'antd';
 import api from '../../utils/api';
 
 const AddPanelForm = ({ onCancel, isAddModal, fetchPanels }) => {
@@ -25,6 +25,12 @@ const AddPanelForm = ({ onCancel, isAddModal, fetchPanels }) => {
             <Form form={form} onFinish={onFinish} layout="vertical">
                 <Form.Item label="serialNumber" name="serialNumber" rules={[{ required: true, message: 'Please enter serial Number' }]}>
                     <Input />
+                </Form.Item>
+                <Form.Item label="DOM" name="DOM" rules={[{ required: true, message: 'Please select a DOM' }]}>
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item label="DOE" name="DOE" rules={[{ required: true, message: 'Please select a DOE' }]}>
+                    <DatePicker />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">

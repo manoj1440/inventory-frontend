@@ -1,9 +1,16 @@
-import React from 'react';
-import { Form, Input, Button, Modal, Select } from 'antd';
+import React, { useEffect } from 'react';
+import { Form, Input, Button, Modal, Select, DatePicker } from 'antd';
 import api from '../../utils/api';
+import dayjs from 'dayjs';
 
 const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }) => {
     const [form] = Form.useForm();
+    useEffect(() => {
+        form.resetFields();
+        panel.DOE = dayjs(panel.DOE || new Date().toISOString());
+        panel.DOM = dayjs(panel.DOM || new Date().toISOString());
+        form.setFieldsValue(panel);
+    }, [panel, form]);
 
     const onFinish = async (values) => {
         try {
@@ -23,10 +30,16 @@ const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }
             footer={null}
         >
             <Form form={form} onFinish={onFinish} layout="vertical">
-                <Form.Item label="Serial Number" name="serialNumber" initialValue={panel.serialNumber}>
+                <Form.Item label="Serial Number" name="serialNumber" >
                     <Input />
                 </Form.Item>
-                <Form.Item label="Included in Batch" name="included" initialValue={panel.included}>
+                <Form.Item label="DOM" name="DOM" rules={[{ required: true, message: 'Please select a DOM' }]}>
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item label="DOE" name="DOE" rules={[{ required: true, message: 'Please select a DOE' }]}>
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item label="Included in Batch" name="included">
                     <Select placeholder="Select an option">
                         <Select.Option value={true}>Yes</Select.Option>
                         <Select.Option value={false}>No</Select.Option>

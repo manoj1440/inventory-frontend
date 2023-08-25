@@ -3,6 +3,8 @@ import { Table, Pagination, Space, Button, Modal } from 'antd';
 import api from '../../utils/api';
 import EditPanel from './EditPanel';
 import AddPanelForm from './AddPanelForm';
+import CustomTable from '../common/CustomTable';
+import dayjs from 'dayjs';
 
 const Panels = () => {
     const [panels, setPanels] = useState([]);
@@ -38,11 +40,32 @@ const Panels = () => {
         fetchPanels(pagination.current, pagination.pageSize);
     }, []);
 
+    const readableDate = (dateObject) => {
+        return dayjs(new Date(dateObject)).format('YYYY-MM-DD HH:mm:ss');
+    }
+
     const columns = [
         {
             title: 'Serial Number',
             dataIndex: 'serialNumber',
             key: 'serialNumber',
+        },
+        {
+            title: 'DOM',
+            dataIndex: 'DOM',
+            key: 'DOM',
+            render: (DOM) => DOM ? readableDate(DOM) : 'NA',
+        },
+        {
+            title: 'DOE',
+            dataIndex: 'DOE',
+            key: 'DOE',
+            render: (DOE) => DOE ?readableDate(DOE) : 'NA',
+        },
+        {
+            title: 'Batch Name',
+            dataIndex: 'AssetNumber',
+            key: 'AssetNumber'
         },
         {
             title: 'Included in Batch',
@@ -91,23 +114,24 @@ const Panels = () => {
                 onClick={() => setIsAddModal(true)} type="primary">
                 Add Panel
             </Button>
-            <Table
-                dataSource={panels}
-                columns={columns}
-                pagination={pagination}
-                onChange={(pagination, filters, sorter) => setPagination(pagination)}
+            <CustomTable
+                downloadButtonText="Export"
+                downloadFileName="Panels"
+                isFilter={false}
+                data={panels}
+                columns={columns} pagination={pagination}
             />
-            <EditPanel
+            {editPanelData && <EditPanel
                 panel={editPanelData}
                 editModalVisible={editModalVisible}
                 setEditModalVisible={setEditModalVisible}
                 fetchPanels={fetchPanels}
-            />
+            />}
 
-            <AddPanelForm
+            {isAddModal && <AddPanelForm
                 isAddModal={isAddModal}
                 fetchPanels={fetchPanels}
-                onCancel={setIsAddModal} />
+                onCancel={setIsAddModal} />}
         </div>
     );
 };

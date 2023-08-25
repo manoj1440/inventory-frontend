@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Table, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import ExcelExport from './ExcelExport';
 
-const CustomTable = ({ data, columns, pagination }) => {
+const CustomTable = ({ data, columns, downloadButtonText, downloadFileName, pagination, isFilter = false }) => {
     const [columnFilters, setColumnFilters] = useState({});
     const [currentPagination, setCurrentPagination] = useState(pagination || {});
 
     const onChangePagination = (pagination, filters) => {
         setCurrentPagination(pagination);
-        setColumnFilters({...filters});
+        setColumnFilters({ ...filters });
     };
 
     const applyFilters = (data, filters) => {
@@ -95,14 +96,21 @@ const CustomTable = ({ data, columns, pagination }) => {
 
 
     return (
-        <Table
-            dataSource={[...filteredData]}
-            columns={enhancedColumns}
-            pagination={currentPagination}
-            onChange={(pagination, filters) => {
-                onChangePagination(pagination, filters)
-            }}
-        />
+        <>
+            <ExcelExport
+                data={filteredData}
+                buttonText={downloadButtonText}
+                fileName={downloadFileName}
+            />
+            <Table
+                dataSource={isFilter ? [...filteredData] : data}
+                columns={isFilter ? enhancedColumns : columns}
+                pagination={currentPagination}
+                onChange={(pagination, filters) => {
+                    onChangePagination(pagination, filters)
+                }}
+            />
+        </>
     );
 };
 

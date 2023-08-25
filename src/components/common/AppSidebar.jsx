@@ -6,6 +6,7 @@ import {
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
+    UsergroupDeleteOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -37,6 +38,11 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
             key: '/users',
             icon: <UserOutlined style={{ fontSize: '1rem' }} />,
             label: 'Users',
+        },
+        {
+            key: '/customers',
+            icon: <UsergroupDeleteOutlined style={{ fontSize: '1rem' }} />,
+            label: 'Customers',
         },
     ];
 

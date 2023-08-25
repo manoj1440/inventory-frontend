@@ -8,7 +8,7 @@ const AddBatchForm = ({ onCancel, isAddModal, fetchBatches }) => {
     const [panelList, setPanelList] = useState([]);
 
     useEffect(() => {
-        api.request('get', '/api/user')
+        api.request('get', '/api/user/customer')
             .then((res) => {
                 const { data } = res;
                 setUserList(data);
@@ -40,9 +40,6 @@ const AddBatchForm = ({ onCancel, isAddModal, fetchBatches }) => {
             <Form form={form} onFinish={onFinish} layout="vertical">
                 <Form.Item label="AssetNumber" name="AssetNumber" rules={[{ required: true, message: 'Please enter an AssetNumber' }]}>
                     <Input />
-                </Form.Item>
-                <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Please enter a quantity' }]}>
-                    <Input type="number" />
                 </Form.Item>
                 <Form.Item label="PCM" name="PCM" rules={[{ required: true, message: 'Please enter a PCM' }]}>
                     <Input />

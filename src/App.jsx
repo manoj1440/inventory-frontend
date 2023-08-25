@@ -6,6 +6,7 @@ import Users from './components/users/Users';
 import Panels from './components/panels/Panels';
 import Batches from './components/batches/Batches';
 import DashboardPage from './components/dashboard/DashboardPage';
+import Customer from './components/customers/Customer';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="batches" element={<Batches />} />
           <Route path="users" element={<Users />} />
+          <Route path="customers" element={<Customer />} />
           <Route path="panels" element={<Panels />} />
         </Route>
       </Routes>

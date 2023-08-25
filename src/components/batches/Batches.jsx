@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Space, Button, Modal, Popover } from 'antd';
+import { Space, Button, Modal, Popover } from 'antd';
 import api from '../../utils/api';
 import AddBatchForm from './AddBatchForm';
 import EditBatchForm from './EditBatchForm';
 import dayjs from 'dayjs';
+import CustomTable from '../common/CustomTable';
 
 const Batches = () => {
     const [batches, setBatches] = useState([]);
@@ -50,11 +51,6 @@ const Batches = () => {
             key: 'AssetNumber',
         },
         {
-            title: 'Quantity',
-            dataIndex: 'quantity',
-            key: 'quantity',
-        },
-        {
             title: 'PCM',
             dataIndex: 'PCM',
             key: 'PCM',
@@ -63,13 +59,13 @@ const Batches = () => {
             title: 'DOM',
             dataIndex: 'DOM',
             key: 'DOM',
-            render: (DOM) => readableDate(DOM),
+            render: (DOM) => dayjs(new Date(DOM)).format('YYYY/MM'),
         },
         {
-            title: 'createdAt',
-            dataIndex: 'createdAt',
-            key: 'createdAt',
-            render: (createdAt) => readableDate(createdAt),
+            title: 'Dispatched',
+            dataIndex: 'Dispatched',
+            key: 'Dispatched',
+            render: (Dispatched) => Dispatched ? readableDate(Dispatched) : 'NA',
         },
         {
             title: 'receivedAt',
@@ -100,15 +96,15 @@ const Batches = () => {
             key: 'DeliveryLocation',
         },
         {
-            title: 'User',
+            title: 'Customer',
             key: 'user',
             render: (_, record) => (
                 <Popover
                     content={record.user.map((user) => user.name).join(', ')}
-                    title="Users"
+                    title="Customers"
                     trigger="hover"
                 >
-                    <div className='table-rendor-button'>View Users</div>
+                    <div className='table-rendor-button'>View Customers</div>
                 </Popover>
             ),
         },
@@ -131,6 +127,9 @@ const Batches = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
+                    <Button onClick={() => handleDispatchPanel(record._id)} type="primary">
+                        Make Dispatch
+                    </Button>
                     <Button onClick={() => handleReceivePanel(record._id)} type="primary">
                         Mark Receive
                     </Button>
@@ -176,6 +175,20 @@ const Batches = () => {
         });
     };
 
+    const handleDispatchPanel = (panelId) => {
+        Modal.confirm({
+            title: 'Confirm Dispatch',
+            content: 'This will mark this batch as Dispatch ?',
+            onOk: async () => {
+                try {
+                    const response = await api.request('put', `/api/batch/${panelId}`, { Dispatched: new Date().toISOString() });
+                    fetchBatches(pagination.current, pagination.pageSize);
+                } catch (error) {
+                    console.error('Error updating batch Dispatch:', error);
+                }
+            },
+        });
+    };
 
     return (
         <div>
@@ -184,11 +197,13 @@ const Batches = () => {
                 onClick={() => setIsAddModal(true)} type="primary">
                 Add Batch
             </Button>
-            <Table
-                dataSource={batches}
+            <CustomTable
+                downloadButtonText="Export"
+                downloadFileName="Batches"
+                isFilter={false}
+                data={batches}
                 columns={columns}
                 pagination={pagination}
-                onChange={(pagination, filters, sorter) => setPagination(pagination)}
             />
             {editModalVisible && <EditBatchForm
                 editBatchData={editBatchData}

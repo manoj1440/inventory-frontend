@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Space, Button } from 'antd';
 import api from '../../utils/api';
-import EditUser from './EditUser';
-import AddUserForm from './AddUser';
+import AddCustomerForm from './AddCustomerForm';
+import EditCustomer from './EditCustomer';
+import UploadExcel from '../common/UploadExcel';
 import CustomTable from '../common/CustomTable';
 
-const Users = () => {
+const Customer = () => {
     const [users, setUsers] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
@@ -23,7 +24,7 @@ const Users = () => {
 
     const fetchUsers = async (page = pagination.current, pageSize = pagination.pageSize) => {
         try {
-            const response = await api.request('get', '/api/user');
+            const response = await api.request('get', '/api/user/customer');
             const { data } = response;
             setUsers(data);
             setPagination({
@@ -49,14 +50,13 @@ const Users = () => {
     const handleDeleteUser = (userId) => {
         Modal.confirm({
             title: 'Confirm Deletion',
-            content: 'Are you sure you want to delete this user?',
+            content: 'Are you sure you want to delete this Customer?',
             onOk: async () => {
                 try {
-                    console.log(`Deleting user with ID: ${userId}`);
                     const response = await api.request('delete', `/api/user/${userId}`);
                     fetchUsers(pagination.current, pagination.pageSize);
                 } catch (error) {
-                    console.error('Error deleting user:', error);
+                    console.error('Error deleting Customer:', error);
                 }
             },
         });
@@ -80,9 +80,10 @@ const Users = () => {
             key: 'contact',
         },
         {
-            title: 'Role',
-            dataIndex: 'role',
-            key: 'role',
+            title: 'Location',
+            dataIndex: 'location',
+            key: 'location',
+            render: (location) => location ? location.join(', ') : 'NA',
         },
         {
             title: 'Actions',
@@ -102,30 +103,33 @@ const Users = () => {
     ];
 
     return (
-        <div>
+        <>
             <Button
                 style={{ marginBottom: 10 }}
                 onClick={() => setIsAddModal(true)} type="primary">
-                Add User
+                Add Customer
             </Button>
+            <UploadExcel
+                endpoint="/api/user/bulk"
+                onSuccess={fetchUsers}
+            />
             <CustomTable
                 downloadButtonText="Export"
-                downloadFileName="Users"
-                data={users}
-                columns={columns}
-                pagination={pagination}
+                downloadFileName="Customers"
+                isFilter={false}
+                data={users} columns={columns} pagination={pagination}
             />
-            <EditUser
+            <EditCustomer
                 fetchUsers={fetchUsers}
                 editModalVisible={editModalVisible}
                 user={...editUserData}
                 onCancel={handleEditModalClose} />
-            <AddUserForm
+            <AddCustomerForm
                 isAddModal={isAddModal}
                 fetchUsers={fetchUsers}
                 onCancel={setIsAddModal} />
-        </div>
+        </>
     );
 };
 
-export default Users;
+export default Customer;

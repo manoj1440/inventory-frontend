@@ -35,9 +35,6 @@ const AddUserForm = ({ onCancel, isAddModal, fetchUsers }) => {
                 <Form.Item label="Contact" name="contact" rules={[{ required: true, message: 'Please enter a contact number' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="Location" name="location" rules={[{ required: true, message: 'Please enter a location' }]}>
-                    <Input placeholder="Comma separated values" />
-                </Form.Item>
                 <Form.Item label="Role" name="role" rules={[{ required: true, message: 'Please select a role' }]}>
                     <Select>
                         <Select.Option value="admin">Admin</Select.Option>
