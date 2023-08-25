@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Pagination, Modal, Space, Button } from 'antd';
+import { Table, Modal, Space, Button } from 'antd';
 import api from '../../utils/api';
 import EditUser from './EditUser';
 import AddUserForm from './AddUser';
+import CustomTable from '../common/FilterTable';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
-        total: 0,
     });
 
     const [editModalVisible, setEditModalVisible] = useState(false);
@@ -19,32 +19,22 @@ const Users = () => {
 
     useEffect(() => {
         fetchUsers(pagination.current, pagination.pageSize);
-    }, [pagination.current, pagination.pageSize]);
+    }, []);
 
     const fetchUsers = async (page = pagination.current, pageSize = pagination.pageSize) => {
         try {
-            const startIndex = (page - 1) * pageSize;
-            const endIndex = startIndex + pageSize;
-
             const response = await api.request('get', '/api/user');
             const { data } = response;
-
-            const paginatedUsers = data.slice(startIndex, endIndex).map(user => ({
-                ...user,
-                location: user.location.join(', '), // Convert array to comma-separated string
-            }));
-
-            setUsers(paginatedUsers);
-            setPagination({ ...pagination, total: data.length });
+            setUsers(data);
+            setPagination({
+                current: page,
+                pageSize,
+                total: data.length,
+            });
         } catch (error) {
             console.error('Error fetching users:', error);
         }
     };
-
-    const handlePaginationChange = (page, pageSize) => {
-        setPagination({ ...pagination, current: page, pageSize });
-    };
-
 
     const showEditModal = (record) => {
         setEditUserData(record);
@@ -119,23 +109,20 @@ const Users = () => {
     return (
         <div>
             <Button
-            style={{ marginBottom: 10 }}
-            onClick={() => setIsAddModal(true)} type="primary">
+                style={{ marginBottom: 10 }}
+                onClick={() => setIsAddModal(true)} type="primary">
                 Add User
             </Button>
-            <Table
+            <CustomTable
+                data={users} columns={columns} pagination={pagination}
+            />
+            {/* <Table
                 dataSource={users}
                 columns={columns}
-                pagination={false}
+                pagination={pagination}
+                onChange={(pagination, filters, sorter) => setPagination(pagination)}
                 rowKey={(record) => record._id}
-            />
-            <Pagination
-                style={{ marginTop: '16px', textAlign: 'right' }}
-                current={pagination.current}
-                pageSize={pagination.pageSize}
-                total={pagination.total}
-                onChange={handlePaginationChange}
-            />
+            /> */}
             <EditUser
                 fetchUsers={fetchUsers}
                 editModalVisible={editModalVisible}
