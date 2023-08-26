@@ -118,7 +118,7 @@ const Users = () => {
             <EditUser
                 fetchUsers={fetchUsers}
                 editModalVisible={editModalVisible}
-                user={...editUserData}
+                user={{...editUserData}}
                 onCancel={handleEditModalClose} />
             <AddUserForm
                 isAddModal={isAddModal}

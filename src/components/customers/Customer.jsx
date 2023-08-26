@@ -122,7 +122,7 @@ const Customer = () => {
             <EditCustomer
                 fetchUsers={fetchUsers}
                 editModalVisible={editModalVisible}
-                user={...editUserData}
+                user={{ ...editUserData }}
                 onCancel={handleEditModalClose} />
             <AddCustomerForm
                 isAddModal={isAddModal}
