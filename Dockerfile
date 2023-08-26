@@ -8,6 +8,8 @@ ENV NODE_ENV=production
 
 RUN npm install serve -g
 
+RUN npm install vite -g
+
 RUN npm install
 
 COPY . /app
