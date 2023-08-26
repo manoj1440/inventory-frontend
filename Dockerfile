@@ -4,11 +4,9 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-ENV NODE_ENV=production
+COPY vite.config.js ./
 
 RUN npm install serve -g
-
-RUN npm install vite -g
 
 RUN npm install
 
