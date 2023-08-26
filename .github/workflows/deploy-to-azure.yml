@@ -24,13 +24,3 @@ jobs:
       run: |
         docker build -t ${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ secrets.AZURE_WEBAPP_NAME }}:$GITHUB_SHA .
         docker push ${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ secrets.AZURE_WEBAPP_NAME }}:$GITHUB_SHA
-
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-        images: ${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ secrets.AZURE_WEBAPP_NAME }}:$GITHUB_SHA
-        ports: ${{ secrets.PORT }}
-        env: |
-          PORT=${{ secrets.PORT }}
-          VITE_BASE_URL=${{ secrets.VITE_BASE_URL }}
