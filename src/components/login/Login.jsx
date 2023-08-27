@@ -26,7 +26,6 @@ const Login = () => {
                 }
                 if (response.status) {
                     localStorage.setItem('user', JSON.stringify(response.data));
-                    console.log(response, "loginresponse")
                     navigate("/dashboard");
                     form.resetFields();
                 }

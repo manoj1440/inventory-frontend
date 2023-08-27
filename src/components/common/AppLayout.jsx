@@ -4,8 +4,6 @@ import { Layout, theme } from 'antd';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AppSidebar from './AppSidebar';
 import { Footer } from 'antd/es/layout/layout';
-
-import Cookies from 'js-cookie';
 import AppHeader from './AppHeader';
 const { Content } = Layout;
 const AppLayout = () => {
@@ -17,12 +15,18 @@ const AppLayout = () => {
     const isLoginPage = location.pathname === '/login';
 
     useEffect(() => {
-        const tokenJs = Cookies.get('token');
-        if (tokenJs && isLoginPage) {
+        let userData = null;
+        try {
+            userData = JSON.parse(localStorage.getItem('user'));
+        } catch (error) {
+
+        }
+
+        if (userData && isLoginPage) {
             navigate('/dashboard');
         }
 
-        if (!tokenJs && !isLoginPage) {
+        if (!userData && !isLoginPage) {
             navigate('/login');
             localStorage.clear();
         }
