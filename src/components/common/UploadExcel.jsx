@@ -21,7 +21,7 @@ const UploadExcel = ({ endpoint, onSuccess, buttonText }) => {
 
             try {
                 const response = await api.request('post', endpoint, { users: jsonData });
-                if (response.success) {
+                if (response.status) {
                     onSuccess();
                     message.success('Bulk upload completed successfully.');
                 } else {
@@ -43,9 +43,9 @@ const UploadExcel = ({ endpoint, onSuccess, buttonText }) => {
 
     return (
         <>
-            <Upload 
-            style={{ marginLeft: 10 }}
-            beforeUpload={beforeUpload} showUploadList={false}>
+            <Upload
+                style={{ marginLeft: 10 }}
+                beforeUpload={beforeUpload} showUploadList={false}>
                 <Button style={{ marginLeft: 10 }} icon={<UploadOutlined />}>{buttonText || 'Select File'}</Button>
             </Upload>
             <Button type="primary" onClick={handleUpload} style={{ marginLeft: 10 }}>
