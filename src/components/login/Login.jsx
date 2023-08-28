@@ -6,6 +6,10 @@ import api from "../../utils/api";
 import { Button, Card, Form, Input } from "antd";
 import Title from "antd/es/typography/Title";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import './Login.css';
+import logo from '../../assets/logo.png';
+import loginbg from '../../assets/loginbg.png';
+
 
 const Login = () => {
     const [form] = Form.useForm();
@@ -35,35 +39,56 @@ const Login = () => {
 
     return (
         <div className="login-page">
-            <Card className="login-card">
-                <Title level={2}>Login Now !!!</Title>
-                <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={handleLogin}>
-                    <Form.Item
-                        name="email"
-                        rules={[
-                            { required: true, message: 'Please input your email!' },
-                            { type: 'email', message: 'Please enter a valid email!' }
-                        ]}
-                    >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your Password!' }]}
-                    >
-                        <Input
-                            prefix={<LockOutlined className="site-form-item-icon" />}
-                            type="password"
-                            placeholder="Password"
-                        />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                            Log in
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Card>
+
+            <div className="login-card">
+                <div className="login-left">
+                    <div>Welcome back !</div>
+                    <img
+                        style={{
+                            height: '25rem',
+                            width: '25rem'
+                        }}
+                        className="login"
+                        alt="Login"
+                        src={loginbg}
+                    />
+                </div>
+                <div className="login-right">
+                    <Card >
+                        <div className="logo">
+                            <img src={logo} alt="Logo" />
+                        </div>
+                        {/* <Title level={3}>Login Now !</Title> */}
+
+                        <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={handleLogin}>
+                            <Form.Item
+                                name="email"
+                                rules={[
+                                    { required: true, message: 'Please input your email!' },
+                                    { type: 'email', message: 'Please enter a valid email!' }
+                                ]}
+                            >
+                                <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                            </Form.Item>
+                            <Form.Item
+                                name="password"
+                                rules={[{ required: true, message: 'Please input your Password!' }]}
+                            >
+                                <Input size="large"
+                                    prefix={<LockOutlined className="site-form-item-icon" />}
+                                    type="password"
+                                    placeholder="Password"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit" className="login-form-button">
+                                    Log in
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Card>
+                </div>
+            </div>
         </div>
     );
 };
