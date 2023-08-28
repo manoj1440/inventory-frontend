@@ -5,6 +5,7 @@ import EditPanel from './EditPanel';
 import AddPanelForm from './AddPanelForm';
 import CustomTable from '../common/CustomTable';
 import dayjs from 'dayjs';
+import UploadExcel from '../common/UploadExcel';
 
 const Panels = () => {
     const [panels, setPanels] = useState([]);
@@ -44,6 +45,21 @@ const Panels = () => {
         return dayjs(new Date(dateObject)).format('YYYY-MM-DD HH:mm:ss');
     }
 
+    const handleReceivePanel = (panelId) => {
+        Modal.confirm({
+            title: 'Confirm Receive',
+            content: 'This will mark this Panel as received ?',
+            onOk: async () => {
+                try {
+                    const response = await api.request('put', `/api/panel/${panelId}`, { received: true, receivedAt: new Date().toISOString() });
+                    fetchPanels(pagination.current, pagination.pageSize);
+                } catch (error) {
+                    console.error('Error updating Panel:', error);
+                }
+            },
+        });
+    };
+
     const columns = [
         {
             title: 'Serial Number',
@@ -74,11 +90,26 @@ const Panels = () => {
             render: (included) => `${included ? 'Yes' : 'No'}`,
         },
         {
+            title: 'receivedAt',
+            dataIndex: 'receivedAt',
+            key: 'receivedAt',
+            render: (receivedAt) => receivedAt ? readableDate(receivedAt) : 'NA',
+        },
+        {
+            title: 'received',
+            dataIndex: 'received',
+            key: 'received',
+            render: (received) => received ? 'Yes' : 'No',
+        },
+        {
             title: 'Actions',
             dataIndex: '_id',
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
+                    <Button onClick={() => handleReceivePanel(record._id)} type="primary">
+                        Mark Receive
+                    </Button>
                     <Button onClick={() => handleEdit(record)} type="primary">
                         Edit
                     </Button>
@@ -114,6 +145,11 @@ const Panels = () => {
                 onClick={() => setIsAddModal(true)} type="primary">
                 Add Panel
             </Button>
+            <UploadExcel
+                dataKey='panels'
+                endpoint="/api/panel/bulk"
+                onSuccess={fetchPanels}
+            />
             <CustomTable
                 downloadButtonText="Export"
                 downloadFileName="Panels"

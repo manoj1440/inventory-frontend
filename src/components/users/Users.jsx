@@ -4,6 +4,7 @@ import api from '../../utils/api';
 import EditUser from './EditUser';
 import AddUserForm from './AddUser';
 import CustomTable from '../common/CustomTable';
+import UploadExcel from '../common/UploadExcel';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -108,6 +109,11 @@ const Users = () => {
                 onClick={() => setIsAddModal(true)} type="primary">
                 Add User
             </Button>
+            <UploadExcel
+                dataKey='users'
+                endpoint="/api/user/bulk"
+                onSuccess={fetchUsers}
+            />
             <CustomTable
                 downloadButtonText="Export"
                 downloadFileName="Users"
@@ -118,7 +124,7 @@ const Users = () => {
             <EditUser
                 fetchUsers={fetchUsers}
                 editModalVisible={editModalVisible}
-                user={{...editUserData}}
+                user={{ ...editUserData }}
                 onCancel={handleEditModalClose} />
             <AddUserForm
                 isAddModal={isAddModal}

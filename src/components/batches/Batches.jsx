@@ -5,6 +5,7 @@ import AddBatchForm from './AddBatchForm';
 import EditBatchForm from './EditBatchForm';
 import dayjs from 'dayjs';
 import CustomTable from '../common/CustomTable';
+import UploadExcel from '../common/UploadExcel';
 
 const Batches = () => {
     const [batches, setBatches] = useState([]);
@@ -59,7 +60,7 @@ const Batches = () => {
             title: 'DOM',
             dataIndex: 'DOM',
             key: 'DOM',
-            render: (DOM) => dayjs(new Date(DOM)).format('YYYY/MM'),
+            render: (DOM) => DOM ? dayjs(new Date(DOM)).format('YYYY/MM') : 'NA',
         },
         {
             title: 'Dispatched',
@@ -83,7 +84,7 @@ const Batches = () => {
             title: 'Total Panels',
             dataIndex: 'panels',
             key: 'panels',
-            render: (panels) => panels.length,
+            render: (panels) => panels ? panels.length : 'NA',
         },
         {
             title: 'WhLocation',
@@ -98,27 +99,22 @@ const Batches = () => {
         {
             title: 'Customer',
             key: 'user',
-            render: (_, record) => (
-                <Popover
-                    content={record.user.map((user) => user.name).join(', ')}
-                    title="Customers"
-                    trigger="hover"
-                >
-                    <div className='table-rendor-button'>View Customers</div>
-                </Popover>
-            ),
+            dataIndex: 'user',
+            render: (user) => user ? user.name : 'NA'
         },
         {
             title: 'Panel',
             key: 'panel',
             render: (_, record) => (
-                <Popover
-                    content={record.panels.map((panel) => panel.serialNumber).join(', ')}
-                    title="Panels"
-                    trigger="hover"
-                >
-                    <div className='table-rendor-button'>View Panels</div>
-                </Popover>
+                record.panels && record.panels.length > 0 ?
+                    <Popover
+                        content={record.panels.map((panel) => panel.serialNumber).join(', ')}
+                        title="Panels"
+                        trigger="hover"
+                    >
+                        <div className='table-rendor-button'>View Panels</div>
+                    </Popover>
+                    : 'NA'
             ),
         },
         {
@@ -127,16 +123,16 @@ const Batches = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => handleDispatchPanel(record._id)} type="primary">
+                    <Button onClick={() => handleDispatchBatch(record._id)} type="primary">
                         Make Dispatch
                     </Button>
-                    <Button onClick={() => handleReceivePanel(record._id)} type="primary">
+                    <Button onClick={() => handleReceiveBatch(record._id)} type="primary">
                         Mark Receive
                     </Button>
                     <Button onClick={() => handleEdit(record)} type="primary">
                         Edit
                     </Button>
-                    <Button onClick={() => handleDeletePanel(record._id)} type="danger">
+                    <Button onClick={() => handleDeleteBatch(record._id)} type="danger">
                         Delete
                     </Button>
                 </Space>
@@ -144,7 +140,7 @@ const Batches = () => {
         },
     ];
 
-    const handleDeletePanel = (panelId) => {
+    const handleDeleteBatch = (panelId) => {
         Modal.confirm({
             title: 'Confirm Deletion',
             content: 'Are you sure you want to delete this batch?',
@@ -160,7 +156,7 @@ const Batches = () => {
     };
 
 
-    const handleReceivePanel = (panelId) => {
+    const handleReceiveBatch = (panelId) => {
         Modal.confirm({
             title: 'Confirm Receive',
             content: 'This will mark this batch as received ?',
@@ -175,7 +171,7 @@ const Batches = () => {
         });
     };
 
-    const handleDispatchPanel = (panelId) => {
+    const handleDispatchBatch = (panelId) => {
         Modal.confirm({
             title: 'Confirm Dispatch',
             content: 'This will mark this batch as Dispatch ?',
@@ -197,6 +193,11 @@ const Batches = () => {
                 onClick={() => setIsAddModal(true)} type="primary">
                 Add Batch
             </Button>
+            <UploadExcel
+                dataKey='batches'
+                endpoint="/api/batch/bulk"
+                onSuccess={fetchBatches}
+            />
             <CustomTable
                 downloadButtonText="Export"
                 downloadFileName="Batches"

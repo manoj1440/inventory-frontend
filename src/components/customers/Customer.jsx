@@ -110,6 +110,7 @@ const Customer = () => {
                 Add Customer
             </Button>
             <UploadExcel
+                dataKey='users'
                 endpoint="/api/user/bulk"
                 onSuccess={fetchUsers}
             />

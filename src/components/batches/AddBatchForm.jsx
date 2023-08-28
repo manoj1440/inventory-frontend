@@ -54,7 +54,7 @@ const AddBatchForm = ({ onCancel, isAddModal, fetchBatches }) => {
                     <Input />
                 </Form.Item>
                 <Form.Item label="User" name="user" rules={[{ required: true, message: 'Please select a user' }]}>
-                    <Select mode="tags" style={{ width: '100%' }} placeholder="Select or type user">
+                    <Select style={{ width: '100%' }} placeholder="Select or type user">
                         {userList.map(item => <Select.Option key={item._id} value={item._id}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>

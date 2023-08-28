@@ -4,7 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
 import api from '../../utils/api';
 
-const UploadExcel = ({ endpoint, onSuccess, buttonText }) => {
+const UploadExcel = ({ endpoint, onSuccess, buttonText, dataKey }) => {
     const [file, setFile] = useState(null);
 
     const handleUpload = async () => {
@@ -20,9 +20,10 @@ const UploadExcel = ({ endpoint, onSuccess, buttonText }) => {
             const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 
             try {
-                const response = await api.request('post', endpoint, { users: jsonData });
+                const response = await api.request('post', endpoint, { [dataKey]: jsonData });
                 if (response.status) {
                     onSuccess();
+                    setFile(null);
                     message.success('Bulk upload completed successfully.');
                 } else {
                     message.error('An error occurred during bulk upload.');

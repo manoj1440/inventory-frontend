@@ -80,8 +80,8 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                 <Form.Item label="DeliveryLocation" name="DeliveryLocation" initialValue={editBatchData.DeliveryLocation} rules={[{ required: true, message: 'Please enter a DeliveryLocation' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="User" name="user" initialValue={editBatchData.user.map(user => user._id)} rules={[{ required: true, message: 'Please select a user' }]}>
-                    <Select mode="tags" style={{ width: '100%' }} placeholder="Select or type user">
+                <Form.Item label="User" name="user" initialValue={editBatchData.user ? editBatchData.user._id : null} rules={[{ required: true, message: 'Please select a user' }]}>
+                    <Select style={{ width: '100%' }} placeholder="Select or type user">
                         {userList.map(item => <Select.Option key={item._id} value={item._id}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>

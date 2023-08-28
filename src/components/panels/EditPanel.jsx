@@ -7,13 +7,23 @@ const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }
     const [form] = Form.useForm();
     useEffect(() => {
         form.resetFields();
-        panel.DOE = dayjs(panel.DOE || new Date().toISOString());
-        panel.DOM = dayjs(panel.DOM || new Date().toISOString());
+        if (panel.DOM) {
+            panel.DOE = dayjs(panel.DOE || new Date().toISOString());
+        }
+        if (panel.DOM) {
+            panel.DOM = dayjs(panel.DOM || new Date().toISOString());
+        }
         form.setFieldsValue(panel);
     }, [panel, form]);
 
     const onFinish = async (values) => {
         try {
+
+            if (values.received) {
+                values.receivedAt = new Date().toISOString();
+            } else {
+                values.receivedAt = null;
+            }
             const response = await api.request('put', `/api/panel/${panel._id}`, values);
             setEditModalVisible(false);
             fetchPanels();
@@ -40,6 +50,12 @@ const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }
                     <DatePicker />
                 </Form.Item>
                 <Form.Item label="Included in Batch" name="included">
+                    <Select placeholder="Select an option">
+                        <Select.Option value={true}>Yes</Select.Option>
+                        <Select.Option value={false}>No</Select.Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Received" name="received">
                     <Select placeholder="Select an option">
                         <Select.Option value={true}>Yes</Select.Option>
                         <Select.Option value={false}>No</Select.Option>
