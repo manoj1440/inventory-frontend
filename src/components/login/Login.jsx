@@ -45,8 +45,8 @@ const Login = () => {
                     <div>Welcome back !</div>
                     <img
                         style={{
-                            height: '25rem',
-                            width: '25rem'
+                            height: '22rem',
+                            width: '21rem'
                         }}
                         className="login"
                         alt="Login"

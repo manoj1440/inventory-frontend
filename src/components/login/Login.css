@@ -1,3 +1,4 @@
+/* Responsive Styling */
 .login-page {
     display: flex;
     justify-content: center;
@@ -9,11 +10,14 @@
 .login-card {
     display: flex;
     flex-direction: row;
-    width: 75rem;
+    width: 100%;
+    max-width: 1200px;
+    /* Limit the maximum width */
     padding: 20px;
-    height: 44rem;
+    height: 35rem;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
 .login-left {
@@ -27,22 +31,38 @@
     font-family: "Gilroy-Bold", Helvetica;
     flex: 1;
     background: linear-gradient(180deg, rgb(140, 67, 230) 0%, rgb(239, 141, 109) 100%);
-    background-color: rgba(255, 255, 255, 1);
 }
+
 .login-right {
     display: flex;
     align-items: center;
     justify-content: center;
     flex: 1;
-    height: 100%;
-    width: 100%;
+    padding: 20px;
+    /* Add padding for spacing */
 }
-
 
 .login-form {
     width: 100%;
+    max-width: 400px;
 }
 
 .login-form-button {
     width: 100%;
+}
+
+/* Media Query for Smaller Screens */
+@media screen and (max-width: 768px) {
+    .login-card {
+        flex-direction: column;
+        /* Change to column layout for smaller screens */
+        padding: 10px;
+        /* Adjust padding for smaller screens */
+        height: auto;
+    }
+
+    .login-left {
+        font-size: 1.5rem;
+        /* Adjust font size for smaller screens */
+    }
 }
