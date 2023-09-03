@@ -5,6 +5,7 @@ import api from '../../utils/api';
 const AddBatchForm = ({ onCancel, isAddModal, fetchBatches }) => {
     const [form] = Form.useForm();
     const [userList, setUserList] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
     const [panelList, setPanelList] = useState([]);
 
     useEffect(() => {
@@ -50,12 +51,22 @@ const AddBatchForm = ({ onCancel, isAddModal, fetchBatches }) => {
                 <Form.Item label="WhLocation" name="WhLocation" rules={[{ required: true, message: 'Please enter a WhLocation' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="DeliveryLocation" name="DeliveryLocation" rules={[{ required: true, message: 'Please enter a DeliveryLocation' }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item label="User" name="user" rules={[{ required: true, message: 'Please select a user' }]}>
-                    <Select style={{ width: '100%' }} placeholder="Select or type user">
+                <Form.Item label="Customer" name="user" rules={[{ required: true, message: 'Please select a user' }]}>
+                    <Select
+                        onChange={(value) => {
+                            setSelectedUser({});
+                            setSelectedUser(null);
+                            form.resetFields(["DeliveryLocation"]);
+                            const selected = userList.find((user) => user._id === value);
+                            setSelectedUser(selected);
+                        }}
+                        style={{ width: '100%' }} placeholder="Select or type user">
                         {userList.map(item => <Select.Option key={item._id} value={item._id}>{item.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+                <Form.Item label="DeliveryLocation" name="DeliveryLocation" rules={[{ required: true, message: 'Please select a DeliveryLocation' }]}>
+                    <Select disabled={!selectedUser} style={{ width: '100%' }} placeholder="Select or type user">
+                        {selectedUser && selectedUser.location && selectedUser.location.map((item, idx) => <Select.Option key={idx} value={item}>{item}</Select.Option>)}
                     </Select>
                 </Form.Item>
                 <Form.Item label="Panel" name="panels" rules={[{ required: true, message: 'Please select panels' }]}>

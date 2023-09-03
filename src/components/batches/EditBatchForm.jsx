@@ -7,6 +7,9 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
     const [form] = Form.useForm();
     const [userList, setUserList] = useState([]);
     const [panelList, setPanelList] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedUserLocations, setSelectedUserLocations] = useState([]);
+
 
     useEffect(() => {
         api.request('get', '/api/user/customer')
@@ -44,6 +47,20 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
         }
     };
 
+    useEffect(() => {
+        const value = editBatchData.user ? editBatchData.user._id : null
+        const selected = userList.find((user) => user._id === value);
+        setSelectedUser(selected);
+    }, [editBatchData, userList])
+
+    useEffect(() => {
+        if (selectedUser) {
+            setSelectedUserLocations(selectedUser.location || []);
+        } else {
+            setSelectedUserLocations([]);
+        }
+    }, [selectedUser]);
+
     return (
         <Modal
             title="Edit Batch"
@@ -77,12 +94,35 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                 <Form.Item label="WhLocation" name="WhLocation" initialValue={editBatchData.WhLocation} rules={[{ required: true, message: 'Please enter a WhLocation' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="DeliveryLocation" name="DeliveryLocation" initialValue={editBatchData.DeliveryLocation} rules={[{ required: true, message: 'Please enter a DeliveryLocation' }]}>
-                    <Input />
+                <Form.Item label="Customer" name="user" initialValue={editBatchData.user ? editBatchData.user._id : null} rules={[{ required: true, message: 'Please select a user' }]}>
+                    <Select
+                        style={{ width: '100%' }}
+                        placeholder="Select or type user"
+                        onChange={(value) => {
+                            form.resetFields(['DeliveryLocation']);
+                            const selected = userList.find((user) => user._id === value);
+                            setSelectedUser(selected);
+                        }}
+                    >
+                        {userList.map((item) => (
+                            <Select.Option key={item._id} value={item._id}>
+                                {item.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
-                <Form.Item label="User" name="user" initialValue={editBatchData.user ? editBatchData.user._id : null} rules={[{ required: true, message: 'Please select a user' }]}>
-                    <Select style={{ width: '100%' }} placeholder="Select or type user">
-                        {userList.map(item => <Select.Option key={item._id} value={item._id}>{item.name}</Select.Option>)}
+                <Form.Item label="DeliveryLocation" name="DeliveryLocation" initialValue={editBatchData.DeliveryLocation} rules={[{ required: true, message: 'Please enter a DeliveryLocation' }]}>
+                    <Select
+                        disabled={!selectedUser}
+                        style={{ width: '100%' }}
+                        placeholder="Select or type user"
+                        key={selectedUser ? selectedUser._id : 'defaultKey'}
+                    >
+                        {selectedUserLocations.map((item, idx) => (
+                            <Select.Option key={idx} value={item}>
+                                {item}
+                            </Select.Option>
+                        ))}
                     </Select>
                 </Form.Item>
                 <Form.Item label="Panel" name="panels" initialValue={editBatchData.panels.map(panel => panel._id)} rules={[{ required: true, message: 'Please select panels' }]}>

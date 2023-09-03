@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../../utils/api";
-import { Button, Card, Form, Input } from "antd";
+import { Button, Card, Form, Input, message } from "antd";
 import Title from "antd/es/typography/Title";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import './Login.css';
@@ -13,20 +13,17 @@ import loginbg from '../../assets/loginbg.png';
 
 const Login = () => {
     const [form] = Form.useForm();
-    const [err, setErr] = useState("");
     const navigate = useNavigate();
 
     const handleLogin = (values) => {
         if (!values.email || !values.password) {
-            setErr("Please fill in both email and password.");
+            message.error("Please fill in both email and password.");
             return;
         }
         api.request('post', '/api/login', values)
             .then((response) => {
                 if (!response.status) {
-                    setErr(response.message);
-                } else {
-                    setErr(null);
+                    message.error(response.message);
                 }
                 if (response.status) {
                     localStorage.setItem('user', JSON.stringify(response.data));
