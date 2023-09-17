@@ -72,11 +72,16 @@ const Panels = () => {
             key: 'DOM',
             render: (DOM) => DOM ? readableDate(DOM) : 'NA',
         },
+        // {
+        //     title: 'DOE',
+        //     dataIndex: 'DOE',
+        //     key: 'DOE',
+        //     render: (DOE) => DOE ? readableDate(DOE) : 'NA',
+        // },
         {
-            title: 'DOE',
-            dataIndex: 'DOE',
-            key: 'DOE',
-            render: (DOE) => DOE ? readableDate(DOE) : 'NA',
+            title: 'PCM',
+            dataIndex: 'PCM',
+            key: 'PCM'
         },
         {
             title: 'Batch Name',
@@ -99,7 +104,7 @@ const Panels = () => {
             title: 'received',
             dataIndex: 'received',
             key: 'received',
-            render: (received) => received ? 'Yes' : 'No',
+            render: (received) => received ? <span style={{ color: 'green' }}>Yes</span> : 'No',
         },
         {
             title: 'Actions',
@@ -107,7 +112,9 @@ const Panels = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => handleReceivePanel(record._id)} type="primary">
+                    <Button
+                        style={{ backgroundColor: record.received ? 'green' : '' }}
+                        onClick={() => handleReceivePanel(record._id)} type="primary">
                         Mark Receive
                     </Button>
                     <Button onClick={() => handleEdit(record)} type="primary">

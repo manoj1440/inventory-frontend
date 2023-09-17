@@ -37,6 +37,14 @@ const EditCustomer = ({ user, onCancel, editModalVisible, fetchUsers }) => {
         }
     };
 
+    const handleLocationInputKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleLocationAdd();
+        }
+    };
+
+
     const handleLocationRemove = (removedLocation) => {
         const updatedLocations = locations.filter(loc => loc !== removedLocation);
         setLocations(updatedLocations);
@@ -64,7 +72,7 @@ const EditCustomer = ({ user, onCancel, editModalVisible, fetchUsers }) => {
                         placeholder="Enter a location"
                         value={currentLocation}
                         onChange={(e) => setCurrentLocation(e.target.value)}
-                        onPressEnter={handleLocationAdd} // Call handleLocationAdd on Enter key press
+                        onKeyDown={handleLocationInputKeyDown}
                         addonAfter={<PlusOutlined onClick={handleLocationAdd} />} // Icon button for adding location
                     />
                 </Form.Item>

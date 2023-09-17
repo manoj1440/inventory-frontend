@@ -42,16 +42,16 @@ const AddBatchForm = ({ onCancel, isAddModal, fetchBatches }) => {
                 <Form.Item label="AssetNumber" name="AssetNumber" rules={[{ required: true, message: 'Please enter an AssetNumber' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="PCM" name="PCM" rules={[{ required: true, message: 'Please enter a PCM' }]}>
+                <Form.Item label="PCM" name="PCM" >
                     <Input />
                 </Form.Item>
-                <Form.Item label="DOM" name="DOM" rules={[{ required: true, message: 'Please select a DOM' }]}>
+                <Form.Item label="DOM" name="DOM" >
                     <DatePicker />
                 </Form.Item>
-                <Form.Item label="WhLocation" name="WhLocation" rules={[{ required: true, message: 'Please enter a WhLocation' }]}>
+                <Form.Item label="WhLocation" name="WhLocation" >
                     <Input />
                 </Form.Item>
-                <Form.Item label="Customer" name="user" rules={[{ required: true, message: 'Please select a user' }]}>
+                <Form.Item label="Customer" name="user" rules={[{ required: true, message: 'Please select a customer' }]}>
                     <Select
                         onChange={(value) => {
                             setSelectedUser({});

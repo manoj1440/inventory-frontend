@@ -103,6 +103,12 @@ const Batches = () => {
             render: (user) => user ? user.name : 'NA'
         },
         {
+            title: 'Dispatched By',
+            key: 'dispatchedBy',
+            dataIndex: 'dispatchedBy',
+            render: (dispatchedBy) => dispatchedBy ? dispatchedBy.name : 'NA'
+        },
+        {
             title: 'Panel',
             key: 'panel',
             render: (_, record) => (

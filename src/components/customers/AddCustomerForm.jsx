@@ -22,8 +22,17 @@ const AddCustomerForm = ({ onCancel, isAddModal, fetchUsers }) => {
 
     const handleLocationAdd = () => {
         if (currentLocation.trim() !== '') {
-            setLocations([...locations, currentLocation]);
-            setCurrentLocation('');
+            if (!locations.includes(currentLocation.trim())) {
+                setLocations([...locations, currentLocation.trim()]);
+                setCurrentLocation('');
+            }
+        }
+    };
+
+    const handleLocationInputKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleLocationAdd();
         }
     };
 
@@ -54,8 +63,8 @@ const AddCustomerForm = ({ onCancel, isAddModal, fetchUsers }) => {
                         placeholder="Enter a location"
                         value={currentLocation}
                         onChange={(e) => setCurrentLocation(e.target.value)}
-                        onPressEnter={handleLocationAdd} // Call handleLocationAdd on Enter key press
-                        addonAfter={<PlusOutlined onClick={handleLocationAdd} />} // Icon button for adding location
+                        onKeyDown={handleLocationInputKeyDown}
+                        addonAfter={<PlusOutlined onClick={handleLocationAdd} />}
                     />
                 </Form.Item>
                 {locations.length > 0 && <Form.Item>

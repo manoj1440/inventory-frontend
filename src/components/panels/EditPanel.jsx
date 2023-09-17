@@ -43,11 +43,11 @@ const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }
                 <Form.Item label="Serial Number" name="serialNumber" >
                     <Input />
                 </Form.Item>
-                <Form.Item label="DOM" name="DOM" rules={[{ required: true, message: 'Please select a DOM' }]}>
+                <Form.Item label="DOM" name="DOM" >
                     <DatePicker />
                 </Form.Item>
-                <Form.Item label="DOE" name="DOE" rules={[{ required: true, message: 'Please select a DOE' }]}>
-                    <DatePicker />
+                <Form.Item label="PCM" name="PCM">
+                    <Input />
                 </Form.Item>
                 <Form.Item label="Included in Batch" name="included">
                     <Select placeholder="Select an option">

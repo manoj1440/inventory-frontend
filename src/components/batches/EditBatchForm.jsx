@@ -72,10 +72,10 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                 <Form.Item label="AssetNumber" name="AssetNumber" initialValue={editBatchData.AssetNumber} rules={[{ required: true, message: 'Please enter an AssetNumber' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="PCM" name="PCM" initialValue={editBatchData.PCM} rules={[{ required: true, message: 'Please enter a PCM' }]}>
+                <Form.Item label="PCM" name="PCM" initialValue={editBatchData.PCM} >
                     <Input />
                 </Form.Item>
-                <Form.Item label="DOM" name="DOM" initialValue={dayjs(editBatchData.DOM)} rules={[{ required: true, message: 'Please select a DOM' }]}>
+                <Form.Item label="DOM" name="DOM" initialValue={dayjs(editBatchData.DOM)} >
                     <DatePicker />
                 </Form.Item>
                 {editBatchData.receivedAt &&
@@ -91,13 +91,13 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                         </Form.Item>
                     </>
                 }
-                <Form.Item label="WhLocation" name="WhLocation" initialValue={editBatchData.WhLocation} rules={[{ required: true, message: 'Please enter a WhLocation' }]}>
+                <Form.Item label="WhLocation" name="WhLocation" initialValue={editBatchData.WhLocation} >
                     <Input />
                 </Form.Item>
-                <Form.Item label="Customer" name="user" initialValue={editBatchData.user ? editBatchData.user._id : null} rules={[{ required: true, message: 'Please select a user' }]}>
+                <Form.Item label="Customer" name="user" initialValue={editBatchData.user ? editBatchData.user._id : null} rules={[{ required: true, message: 'Please select a customer' }]}>
                     <Select
                         style={{ width: '100%' }}
-                        placeholder="Select or type user"
+                        placeholder="Select or type customer"
                         onChange={(value) => {
                             form.resetFields(['DeliveryLocation']);
                             const selected = userList.find((user) => user._id === value);
@@ -111,11 +111,11 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                         ))}
                     </Select>
                 </Form.Item>
-                <Form.Item label="DeliveryLocation" name="DeliveryLocation" initialValue={editBatchData.DeliveryLocation} rules={[{ required: true, message: 'Please enter a DeliveryLocation' }]}>
+                <Form.Item label="DeliveryLocation" name="DeliveryLocation" initialValue={editBatchData.DeliveryLocation} rules={[{ required: true, message: 'Please select a DeliveryLocation' }]}>
                     <Select
                         disabled={!selectedUser}
                         style={{ width: '100%' }}
-                        placeholder="Select or type user"
+                        placeholder="Select location"
                         key={selectedUser ? selectedUser._id : 'defaultKey'}
                     >
                         {selectedUserLocations.map((item, idx) => (
