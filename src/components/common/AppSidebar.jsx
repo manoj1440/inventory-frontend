@@ -7,7 +7,7 @@ import {
     UsergroupDeleteOutlined,
     GroupOutlined,
     AreaChartOutlined,
-    SlidersOutlined 
+    SlidersOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -22,7 +22,7 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
     const menuItems = [
         {
             key: '/dashboard',
-            icon: <AreaChartOutlined  style={{ fontSize: '1rem' }} />,
+            icon: <AreaChartOutlined style={{ fontSize: '1rem' }} />,
             label: 'Dashboard',
         },
         {
@@ -31,8 +31,13 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
             label: 'Batches',
         },
         {
+            key: '/my-batches',
+            icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
+            label: 'My Batches',
+        },
+        {
             key: '/panels',
-            icon: <SlidersOutlined  style={{ fontSize: '1rem' }} />,
+            icon: <SlidersOutlined style={{ fontSize: '1rem' }} />,
             label: 'Panels',
         },
         {
