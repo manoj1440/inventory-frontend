@@ -52,6 +52,12 @@ const MyBatches = () => {
             render: (panels) => panels ? panels.length : 'NA',
         },
         {
+            title: 'Received Panels',
+            dataIndex: 'panels',
+            key: 'panels',
+            render: (panels) => panels && panels.length > 0 ? panels.filter(item => item.received).length : 'NA',
+        },
+        {
             title: 'Delivery Location',
             dataIndex: 'DeliveryLocation',
             key: 'DeliveryLocation',

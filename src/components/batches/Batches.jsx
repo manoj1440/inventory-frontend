@@ -87,6 +87,12 @@ const Batches = () => {
             render: (panels) => panels ? panels.length : 'NA',
         },
         {
+            title: 'Received Panels',
+            dataIndex: 'panels',
+            key: 'panels',
+            render: (panels) => panels && panels.length > 0 ? panels.filter(item => item.received).length : 'NA',
+        },
+        {
             title: 'WhLocation',
             dataIndex: 'WhLocation',
             key: 'WhLocation',
