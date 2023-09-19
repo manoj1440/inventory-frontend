@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Statistic, Table } from 'antd';
-import './DashboardPage.css'; 
+import { Row, Col, Card, Statistic, Table, Progress } from 'antd';
+import './DashboardPage.css';
 import api from '../../utils/api';
 
 const DashboardPage = () => {
@@ -73,11 +73,38 @@ const DashboardPage = () => {
             </Card>
           </Col>
           <Col xs={24} sm={12} md={6}>
+            <Card className="dashboard-card card-green2">
+              <Statistic
+                title="Total Received Panels"
+                value={dashboardData.totalReceivedPanels}
+                valueStyle={{ fontSize: '2rem' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
             <Card className="dashboard-card card-purple">
               <Statistic
                 title="Total Received Batches"
                 value={dashboardData.totalReceivedBatches}
                 valueStyle={{ fontSize: '2rem' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card className="dashboard-card card-purple">
+              <div style={{
+                marginTop: '-2rem',
+                marginLeft: '-14rem',
+                color: 'rgba(0, 0, 0, 0.45)'
+              }}>Received/Sent Panels</div>
+              <Progress
+                type="dashboard"
+                percent={(dashboardData.totalReceivedPanels / dashboardData.totalPanelsInBatch) * 100}
+                format={() => (
+                  <span>
+                    {dashboardData.totalReceivedPanels} / {dashboardData.totalPanelsInBatch}
+                  </span>
+                )}
               />
             </Card>
           </Col>

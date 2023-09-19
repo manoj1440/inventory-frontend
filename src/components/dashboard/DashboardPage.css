@@ -43,6 +43,10 @@
   background: linear-gradient(135deg, #e8d4f8, #d5aaff);
 }
 
+.card-green2 {
+  background: linear-gradient(135deg, #e8d4f8, #43bbad);
+}
+
 .dashboard-user-card {
   color: white;
   border: none;
