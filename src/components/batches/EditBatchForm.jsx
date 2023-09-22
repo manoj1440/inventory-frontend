@@ -78,7 +78,7 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                 <Form.Item label="DOM" name="DOM" initialValue={dayjs(editBatchData.DOM)} >
                     <DatePicker />
                 </Form.Item>
-                {editBatchData.receivedAt &&
+                {/* {editBatchData.receivedAt &&
                     <>
                         <Form.Item label="Received At" name="receivedAt" initialValue={dayjs(editBatchData.receivedAt)}>
                             <DatePicker />
@@ -90,7 +90,7 @@ const EditBatchForm = ({ onCancel, editModalVisible, editBatchData, fetchBatches
                             </Select>
                         </Form.Item>
                     </>
-                }
+                } */}
                 <Form.Item label="WhLocation" name="WhLocation" initialValue={editBatchData.WhLocation} >
                     <Input />
                 </Form.Item>

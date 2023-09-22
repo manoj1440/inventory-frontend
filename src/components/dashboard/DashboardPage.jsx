@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Statistic, Table, Progress } from 'antd';
 import './DashboardPage.css';
 import api from '../../utils/api';
+import CustomTable from '../common/CustomTable';
 
 const DashboardPage = () => {
   const [dashboardData, setDashboardData] = useState({});
@@ -16,6 +17,7 @@ const DashboardPage = () => {
         name: user.name,
         role: user.role,
         batchesCreated: user.numBatchesCreated,
+        userBatches: user.userBatches,
       }));
       setUserOverviewDataSource(formattedUserOverview);
     } catch (error) {
@@ -37,6 +39,18 @@ const DashboardPage = () => {
       title: 'Batches Assigned',
       dataIndex: 'batchesCreated',
       key: 'batchesCreated',
+    },
+    {
+      title: 'Total Panels',
+      dataIndex: 'userBatches',
+      key: 'userBatches',
+      render: (userBatches) => userBatches && userBatches.length > 0 ? userBatches[0].panels && userBatches[0].panels.length : 'NA'
+    },
+    {
+      title: 'Location',
+      dataIndex: 'userBatches',
+      key: 'userBatches',
+      render: (userBatches) => userBatches && userBatches.length > 0 ? userBatches[0].DeliveryLocation : 'NA'
     },
   ];
 
@@ -113,13 +127,17 @@ const DashboardPage = () => {
       {dashboardData && dashboardData.userOverview && dashboardData.userOverview.length > 0 && (
         <div className="user-overview-table">
           <h2>Customers Info </h2>
-          <Table
-            dataSource={userOverviewDataSource}
+          <CustomTable
+            downloadButtonText="Export"
+            downloadFileName="Users"
+            data={userOverviewDataSource}
+            isFilter={false}
             columns={userOverviewColumns}
             pagination={{
               pageSize: 6,
               hideOnSinglePage: true,
-            }} />
+            }}
+          />
         </div>
       )}
     </div>

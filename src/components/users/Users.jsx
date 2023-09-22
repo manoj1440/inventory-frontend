@@ -118,6 +118,7 @@ const Users = () => {
                 downloadButtonText="Export"
                 downloadFileName="Users"
                 data={users}
+                isFilter={false}
                 columns={columns}
                 pagination={pagination}
             />

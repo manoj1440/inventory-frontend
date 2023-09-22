@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import { Table, Input, Button } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Checkbox, Divider } from 'antd';
+import { FilterOutlined } from '@ant-design/icons';
 import ExcelExport from './ExcelExport';
 
-const CustomTable = ({ data, columns, downloadButtonText, downloadFileName, pagination, isFilter = false }) => {
+const CustomTable = ({
+    data,
+    columns,
+    downloadButtonText,
+    downloadFileName,
+    pagination,
+    isFilter = false,
+}) => {
     const [columnFilters, setColumnFilters] = useState({});
     const [currentPagination, setCurrentPagination] = useState(pagination || {});
 
@@ -13,87 +20,97 @@ const CustomTable = ({ data, columns, downloadButtonText, downloadFileName, pagi
     };
 
     const applyFilters = (data, filters) => {
-        const filtered = data.filter((record) => {
+        return data.filter((record) => {
             return Object.keys(filters).every((key) => {
-                const filterValue = filters[key];
-                if (filterValue === null) return true; // Skip filtering for this column
+                const filterValues = filters[key];
+                if (!filterValues || filterValues.length === 0) return true; // No filter, include the record
 
                 const recordValue = record[key];
 
-                if (Array.isArray(filterValue)) {
-                    if (filterValue.length === 0) {
-                        return true; // No filter values, so include the record
-                    }
-                    return filterValue.some((filter) =>
-                        recordValue.toLowerCase().includes(filter.toLowerCase())
-                    );
+                if (Array.isArray(recordValue)) {
+                    return recordValue.some((value) => filterValues.includes(value));
                 }
 
-                if (typeof filterValue === 'string' && typeof recordValue === 'string') {
-                    return recordValue.toLowerCase().includes(filterValue.toLowerCase());
-                }
-
-                return recordValue === filterValue;
+                return filterValues.includes(recordValue);
             });
         });
-
-        return filtered;
     };
 
-    const filteredData = applyFilters(data, columnFilters);
+    const clearFilter = (dataIndex) => {
+        const updatedColumnFilters = { ...columnFilters };
+        delete updatedColumnFilters[dataIndex];
+        setColumnFilters(updatedColumnFilters);
+        const filteredData = applyFilters(data, updatedColumnFilters);
+        // Update the table data
+        onChangePagination(currentPagination, updatedColumnFilters);
+    };
 
-    const generateColumnFilter = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => confirm()}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
-                />
-                <Button
-                    type="primary"
-                    onClick={() => confirm()}
-                    size="small"
-                    style={{ width: 90, marginRight: 8 }}
-                >
-                    Search
-                </Button>
-                <Button
-                    onClick={() => {
-                        clearFilters(); // Clear Ant Design filter
-                        setSelectedKeys([]); // Clear the filter input value
-                        setColumnFilters((prevFilters) => ({
-                            ...prevFilters,
-                            [dataIndex]: null, // Reset the filter in columnFilters
-                        }));
-                    }}
+    const isFiltered = (dataIndex) => {
+        return columnFilters.hasOwnProperty(dataIndex) && columnFilters[dataIndex].length > 0;
+    };
 
-                    size="small" style={{ width: 90 }}>
-                    Reset
-                </Button>
-            </div>
-        ),
-        filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-                setTimeout(() => searchInput.select());
-            }
+    const generateColumnFilter = (dataIndex, tableData) => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys }) => {
+            // Extract unique values for the specific column from tableData
+            const columnValues = Array.from(
+                new Set(tableData.map((record) => record && record[dataIndex] && record[dataIndex]))
+            ).filter((value) => value !== null);
+
+            const handleCheckboxChange = (values) => {
+                setSelectedKeys(values);
+                // Convert string values back to booleans and null if necessary
+                const selectedValues = values.map((value) =>
+                    value === 'null' ? null : value === 'true' ? true : value === 'false' ? false : value
+                );
+                // Update the filter with the selected values
+                setColumnFilters((prevFilters) => ({
+                    ...prevFilters,
+                    [dataIndex]: selectedValues,
+                }));
+            };
+
+            return (
+                <div style={{ padding: 8 }}>
+                    <Checkbox.Group
+                        style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
+                        options={columnValues.map((value) => value && value.toString())}
+                        value={selectedKeys}
+                        onChange={handleCheckboxChange}
+                    />
+                    <Divider style={{ margin: '4px 0' }} />
+                    <Button
+                        type="default"
+                        onClick={() => {
+                            setSelectedKeys([]); // Clear selected keys (checkboxes)
+                            clearFilter(dataIndex); // Clear the filter
+                        }}
+                        size="small"
+                        style={{ width: '100%', marginRight: 8 }}
+                    >
+                        Clear Filter
+                    </Button>
+                </div>
+            );
         },
+        filterIcon: (filtered) => (
+            <FilterOutlined
+                style={{ color: isFiltered(dataIndex) ? '#1890ff' : undefined }}
+            />
+        ),
     });
+
+
 
     const enhancedColumns = columns.map((column) =>
         column.key === 'actions'
             ? column
             : {
                 ...column,
-                ...generateColumnFilter(column.dataIndex),
+                ...generateColumnFilter(column.dataIndex, data),
             }
     );
 
+    const filteredData = applyFilters(data, columnFilters);
 
     return (
         <>
@@ -107,7 +124,7 @@ const CustomTable = ({ data, columns, downloadButtonText, downloadFileName, pagi
                 columns={isFilter ? enhancedColumns : columns}
                 pagination={currentPagination}
                 onChange={(pagination, filters) => {
-                    onChangePagination(pagination, filters)
+                    onChangePagination(pagination, filters);
                 }}
             />
         </>

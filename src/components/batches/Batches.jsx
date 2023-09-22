@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Button, Modal, Popover } from 'antd';
+import { Space, Button, Modal, Popover, Dropdown, Menu } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
 import api from '../../utils/api';
 import AddBatchForm from './AddBatchForm';
 import EditBatchForm from './EditBatchForm';
@@ -45,6 +46,54 @@ const Batches = () => {
         return dayjs(new Date(dateObject)).format('YYYY-MM-DD HH:mm:ss');
     }
 
+    const ActionDropdown = ({ record }) => {
+        const items = [
+            {
+                key: '1',
+                label: (
+                    <a onClick={() => handleDispatchBatch(record._id)} >
+                        Make Dispatch
+                    </a>
+                ),
+            },
+            // {
+            //     key: '2',
+            //     label: (
+            //         <a onClick={() => handleReceiveBatch(record._id)} >
+            //             Mark Receive
+            //         </a>
+            //     )
+            // },
+            {
+                key: '3',
+                label: (
+                    <a onClick={() => handleEdit(record)} >
+                        Edit
+                    </a>
+                )
+            },
+            {
+                key: '4',
+                label: (
+                    <a onClick={() => handleDeleteBatch(record._id)} >
+                        Delete
+                    </a>
+                ),
+                danger: true
+            },
+        ];
+
+        return (
+            <Dropdown
+                menu={{
+                    items,
+                }}
+            >
+                <Button type='link' icon={<EllipsisOutlined />} />
+            </Dropdown>
+        );
+    };
+
     const columns = [
         {
             title: 'Asset Number',
@@ -68,29 +117,70 @@ const Batches = () => {
             key: 'Dispatched',
             render: (Dispatched) => Dispatched ? readableDate(Dispatched) : 'NA',
         },
-        {
-            title: 'receivedAt',
-            dataIndex: 'receivedAt',
-            key: 'receivedAt',
-            render: (receivedAt) => receivedAt ? readableDate(receivedAt) : 'NA',
-        },
-        {
-            title: 'received',
-            dataIndex: 'received',
-            key: 'received',
-            render: (received) => received ? 'Yes' : 'No',
-        },
+        // {
+        //     title: 'receivedAt',
+        //     dataIndex: 'receivedAt',
+        //     key: 'receivedAt',
+        //     render: (receivedAt) => receivedAt ? readableDate(receivedAt) : 'NA',
+        // },
+        // {
+        //     title: 'received',
+        //     dataIndex: 'received',
+        //     key: 'received',
+        //     render: (received) => received ? 'Yes' : 'No',
+        // },
         {
             title: 'Total Panels',
             dataIndex: 'panels',
             key: 'panels',
-            render: (panels) => panels ? panels.length : 'NA',
+            render: (_, record) => (
+                record.panels && record.panels.length > 0 ?
+                    <Popover
+                        content={record.panels.map((panel) => panel.serialNumber).join(', ')}
+                        trigger="hover"
+                    >
+                        <div className='table-rendor-button'>{record.panels.length}</div>
+                    </Popover>
+                    : 'NA'
+            )
         },
         {
             title: 'Received Panels',
             dataIndex: 'panels',
             key: 'panels',
-            render: (panels) => panels && panels.length > 0 ? panels.filter(item => item.received).length : 'NA',
+            render: (_, record) => (
+                record.panels && record.panels.length > 0 ?
+                    <Popover
+                        content={record.panels.map((panel) => {
+                            if (panel.received) {
+                                return panel.serialNumber
+                            }
+                        }).join(', ')}
+                        trigger="hover"
+                    >
+                        <div className='table-rendor-button'>{record.panels.filter(item => item.received).length}</div>
+                    </Popover>
+                    : 'NA'
+            )
+        },
+        {
+            title: 'Pending Panels',
+            dataIndex: 'panels',
+            key: 'panels',
+            render: (_, record) => (
+                record.panels && record.panels.length > 0 ?
+                    <Popover
+                        content={record.panels.map((panel) => {
+                            if (!panel.received) {
+                                return panel.serialNumber
+                            }
+                        }).join(', ')}
+                        trigger="hover"
+                    >
+                        <div className='table-rendor-button'>{record.panels.filter(item => !item.received).length}</div>
+                    </Popover>
+                    : 'NA'
+            )
         },
         {
             title: 'WhLocation',
@@ -115,39 +205,11 @@ const Batches = () => {
             render: (dispatchedBy) => dispatchedBy ? dispatchedBy.name : 'NA'
         },
         {
-            title: 'Panel',
-            key: 'panel',
-            render: (_, record) => (
-                record.panels && record.panels.length > 0 ?
-                    <Popover
-                        content={record.panels.map((panel) => panel.serialNumber).join(', ')}
-                        title="Panels"
-                        trigger="hover"
-                    >
-                        <div className='table-rendor-button'>View Panels</div>
-                    </Popover>
-                    : 'NA'
-            ),
-        },
-        {
             title: 'Actions',
             dataIndex: '_id',
             key: 'actions',
             render: (_, record) => (
-                <Space size="middle">
-                    <Button onClick={() => handleDispatchBatch(record._id)} type="primary">
-                        Make Dispatch
-                    </Button>
-                    <Button onClick={() => handleReceiveBatch(record._id)} type="primary">
-                        Mark Receive
-                    </Button>
-                    <Button onClick={() => handleEdit(record)} type="primary">
-                        Edit
-                    </Button>
-                    <Button onClick={() => handleDeleteBatch(record._id)} type="danger">
-                        Delete
-                    </Button>
-                </Space>
+                <ActionDropdown record={record} />
             ),
         },
     ];
