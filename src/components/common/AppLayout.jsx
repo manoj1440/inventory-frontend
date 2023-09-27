@@ -62,6 +62,7 @@ const AppLayout = () => {
                 <Footer
                     style={{
                         textAlign: 'center',
+                        padding: '0px 0px 10px 0px'
                     }}
                 >
                     InfyuLabs ©2023
