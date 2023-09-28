@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import dayjs from 'dayjs';
 import CustomTable from '../common/CustomTable';
+import { Popover } from 'antd';
 
 const MyBatches = () => {
     const [batches, setBatches] = useState([]);
@@ -49,13 +50,54 @@ const MyBatches = () => {
             title: 'Total Panels',
             dataIndex: 'panels',
             key: 'panels',
-            render: (panels) => panels ? panels.length : 'NA',
+            render: (_, record) => (
+                record.panels && record.panels.length > 0 ?
+                    <Popover
+                        content={record.panels.map((panel) => panel.serialNumber).join(', ')}
+                        trigger="hover"
+                    >
+                        <div className='table-rendor-button'>{record.panels.length}</div>
+                    </Popover>
+                    : 'NA'
+            )
         },
         {
             title: 'Received Panels',
             dataIndex: 'panels',
             key: 'panels',
-            render: (panels) => panels && panels.length > 0 ? panels.filter(item => item.received).length : 'NA',
+            render: (_, record) => (
+                record.panels && record.panels.length > 0 ?
+                    <Popover
+                        content={record.panels.map((panel) => {
+                            if (panel.received) {
+                                return panel.serialNumber
+                            }
+                        }).join(', ')}
+                        trigger="hover"
+                    >
+                        <div className='table-rendor-button'>{record.panels.filter(item => item.received).length}</div>
+                    </Popover>
+                    : 'NA'
+            )
+        },
+        {
+            title: 'Pending Panels',
+            dataIndex: 'panels',
+            key: 'panels',
+            render: (_, record) => (
+                record.panels && record.panels.length > 0 ?
+                    <Popover
+                        content={record.panels.map((panel) => {
+                            if (!panel.received) {
+                                return panel.serialNumber
+                            }
+                        }).join(', ')}
+                        trigger="hover"
+                    >
+                        <div className='table-rendor-button'>{record.panels.filter(item => !item.received).length}</div>
+                    </Popover>
+                    : 'NA'
+            )
         },
         {
             title: 'Delivery Location',

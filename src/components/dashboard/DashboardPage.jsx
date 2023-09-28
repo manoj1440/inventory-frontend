@@ -95,7 +95,7 @@ const DashboardPage = () => {
               />
             </Card>
           </Col>
-          <Col xs={24} sm={12} md={6}>
+          {/* <Col xs={24} sm={12} md={6}>
             <Card className="dashboard-card card-purple">
               <Statistic
                 title="Total Received Batches"
@@ -103,7 +103,7 @@ const DashboardPage = () => {
                 valueStyle={{ fontSize: '2rem' }}
               />
             </Card>
-          </Col>
+          </Col> */}
           <Col xs={24} sm={12} md={6}>
             <Card className="dashboard-card card-purple">
               <div style={{
