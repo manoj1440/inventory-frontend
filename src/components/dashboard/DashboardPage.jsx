@@ -108,7 +108,6 @@ const DashboardPage = () => {
             <Card className="dashboard-card card-purple">
               <div style={{
                 marginTop: '-2rem',
-                marginLeft: '-14rem',
                 color: 'rgba(0, 0, 0, 0.45)'
               }}>Received/Sent Panels</div>
               <Progress
