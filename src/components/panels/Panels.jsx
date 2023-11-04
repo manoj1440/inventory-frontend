@@ -95,6 +95,12 @@ const Panels = () => {
             render: (included) => `${included ? 'Yes' : 'No'}`,
         },
         {
+            title: 'Active',
+            dataIndex: 'isActive',
+            key: 'isActive',
+            render: (isActive) => `${isActive ? 'Yes' : 'No'}`,
+        },
+        {
             title: 'receivedAt',
             dataIndex: 'receivedAt',
             key: 'receivedAt',

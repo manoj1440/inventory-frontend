@@ -61,6 +61,12 @@ const EditPanel = ({ panel, editModalVisible, setEditModalVisible, fetchPanels }
                         <Select.Option value={false}>No</Select.Option>
                     </Select>
                 </Form.Item>
+                <Form.Item label="Active" name="isActive">
+                    <Select placeholder="Select an option">
+                        <Select.Option value={true}>Yes</Select.Option>
+                        <Select.Option value={false}>No</Select.Option>
+                    </Select>
+                </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
                         Save
