@@ -1,32 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Button, Modal } from 'antd';
+import { Space, Button, Modal, Input } from 'antd';
 import api from '../../utils/api';
 import EditPanel from './EditPanel';
 import AddPanelForm from './AddPanelForm';
 import CustomTable from '../common/CustomTable';
 import dayjs from 'dayjs';
 import UploadExcel from '../common/UploadExcel';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 const Panels = () => {
     const [panels, setPanels] = useState([]);
-    const [pagination, setPagination] = useState({
-        current: 1,
-        pageSize: 10,
-    });
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editPanelData, setEditPanelData] = useState({});
     const [isAddModal, setIsAddModal] = useState(false)
+    const [totalRecords, setTotalRecords] = useState(0)
+    const [searchQuery, setSearchQuery] = useState('');
 
+    const handleSearch = (value) => {
+        setSearchQuery(value);
+        if (value && value.trim().length > 0) {
+            fetchPanels('', '', value);
+        } else {
+            fetchPanels();
+        }
+    };
 
-    const fetchPanels = async (page = pagination.current, pageSize = pagination.pageSize) => {
+    useEffect(() => {
+        if (searchQuery.trim().length <= 0) {
+            fetchPanels();
+        }
+    }, [searchQuery])
+
+    const fetchPanels = async (page = 1, pageSize = 10, search = '') => {
         try {
-            const response = await api.request('get', '/api/panel'); // Modify this according to your API
+            const response = await api.request('get', `/api/panel?page=${page}&pageSize=${pageSize}&search=${search}`);
             setPanels(response.data);
-            setPagination({
-                current: page,
-                pageSize,
-                total: response.data.length,
-            });
+            setTotalRecords(response.total);
         } catch (error) {
             console.error('Error fetching panels:', error);
         }
@@ -38,7 +47,7 @@ const Panels = () => {
     };
 
     useEffect(() => {
-        fetchPanels(pagination.current, pagination.pageSize);
+        fetchPanels();
     }, []);
 
     const readableDate = (dateObject) => {
@@ -52,7 +61,7 @@ const Panels = () => {
             onOk: async () => {
                 try {
                     const response = await api.request('put', `/api/panel/${panelId}`, { received: true, receivedAt: new Date().toISOString() });
-                    fetchPanels(pagination.current, pagination.pageSize);
+                    fetchPanels();
                 } catch (error) {
                     console.error('Error updating Panel:', error);
                 }
@@ -141,7 +150,7 @@ const Panels = () => {
             onOk: async () => {
                 try {
                     const response = await api.request('delete', `/api/panel/${panelId}`);
-                    fetchPanels(pagination.current, pagination.pageSize);
+                    fetchPanels();
                 } catch (error) {
                     console.error('Error deleting panel:', error);
                 }
@@ -149,26 +158,48 @@ const Panels = () => {
         });
     };
 
+    const handleClearSearch = () => {
+        setSearchQuery('');
+    };
 
     return (
         <div>
 
-            <Button
-                style={{ marginBottom: 10 }}
-                onClick={() => setIsAddModal(true)} type="primary">
-                Add Panel
-            </Button>
-            <UploadExcel
-                dataKey='panels'
-                endpoint="/api/panel/bulk"
-                onSuccess={fetchPanels}
-            />
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
+                <Button
+                    style={{ marginBottom: 10 }}
+                    onClick={() => setIsAddModal(true)} type="primary">
+                    Add Panel
+                </Button>
+                <UploadExcel
+                    dataKey='panels'
+                    endpoint="/api/panel/bulk"
+                    onSuccess={fetchPanels}
+                />
+                <Input.Search
+                    style={{ width: '15rem' }}
+                    placeholder="Search by panel name"
+                    value={searchQuery}
+                    onSearch={handleSearch}
+                    enterButton
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    suffix={ // Add a clear button
+                        searchQuery && (
+                            <Button type="link" icon={<CloseCircleOutlined />} onClick={handleClearSearch} />
+                        )
+                    }
+                />
+
+            </div>
+
             <CustomTable
                 downloadButtonText="Export"
                 downloadFileName="Panels"
                 isFilter={false}
                 data={panels}
-                columns={columns} pagination={pagination}
+                columns={columns}
+                fetchData={fetchPanels}
+                totalRecords={totalRecords}
             />
             {editPanelData && <EditPanel
                 panel={editPanelData}
