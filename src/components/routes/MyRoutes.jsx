@@ -10,6 +10,7 @@ const MyRoutes = () => {
         current: 1,
         pageSize: 10,
     });
+
     const fetchRoutes = async (page = pagination.current, pageSize = pagination.pageSize) => {
         try {
             const response = await api.request('get', '/api/route');
@@ -109,8 +110,9 @@ const MyRoutes = () => {
             key: 'dispatchedBy',
             dataIndex: 'dispatchedBy',
             render: (dispatchedBy) => dispatchedBy ? dispatchedBy.name : 'NA'
-        },
+        }
     ];
+
 
     return (
         <>
