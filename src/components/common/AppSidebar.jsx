@@ -19,38 +19,77 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
     const handleMenuClick = ({ key }) => {
         navigate(key);
     };
-    const menuItems = [
-        {
-            key: '/dashboard',
-            icon: <AreaChartOutlined style={{ fontSize: '1rem' }} />,
-            label: 'Dashboard',
-        },
-        {
-            key: '/batches',
-            icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
-            label: 'Batches',
-        },
-        {
-            key: '/my-batches',
-            icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
-            label: 'My Batches',
-        },
-        {
-            key: '/panels',
-            icon: <SlidersOutlined style={{ fontSize: '1rem' }} />,
-            label: 'Panels',
-        },
-        {
-            key: '/users',
-            icon: <UserOutlined style={{ fontSize: '1rem' }} />,
-            label: 'Users',
-        },
-        {
-            key: '/customers',
-            icon: <UsergroupDeleteOutlined style={{ fontSize: '1rem' }} />,
-            label: 'Customers',
-        },
-    ];
+
+    let menuItems = [];
+
+    if (import.meta.env.VITE_IS_CRATES_UI || false) {
+        menuItems = [
+            {
+                key: '/dashboard',
+                icon: <AreaChartOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Dashboard',
+            },
+            {
+                key: '/routes',
+                icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Routes',
+            },
+            {
+                key: '/my-routes',
+                icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
+                label: 'My Routes',
+            },
+            {
+                key: '/crates',
+                icon: <SlidersOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Crates',
+            },
+            {
+                key: '/users',
+                icon: <UserOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Users',
+            },
+            {
+                key: '/customers',
+                icon: <UsergroupDeleteOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Customers',
+            },
+        ];
+    } else {
+        menuItems = [
+            {
+                key: '/dashboard',
+                icon: <AreaChartOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Dashboard',
+            },
+            {
+                key: '/batches',
+                icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Batches',
+            },
+            {
+                key: '/my-batches',
+                icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
+                label: 'My Batches',
+            },
+            {
+                key: '/panels',
+                icon: <SlidersOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Panels',
+            },
+            {
+                key: '/users',
+                icon: <UserOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Users',
+            },
+            {
+                key: '/customers',
+                icon: <UsergroupDeleteOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Customers',
+            },
+        ];
+    }
+
 
     return (
         <Sider
