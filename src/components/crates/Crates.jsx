@@ -192,7 +192,7 @@ const Crates = () => {
 
             </div>
 
-            <CustomTable
+            {panels && panels.length > 0 && <CustomTable
                 downloadButtonText="Export"
                 downloadFileName="Crates"
                 isFilter={false}
@@ -200,7 +200,7 @@ const Crates = () => {
                 columns={columns}
                 fetchData={fetchPanels}
                 totalRecords={totalRecords}
-            />
+            />}
             {editPanelData && <EditCrate
                 panel={editPanelData}
                 editModalVisible={editModalVisible}
