@@ -27,7 +27,11 @@ const Login = () => {
                 }
                 if (response.status) {
                     localStorage.setItem('user', JSON.stringify(response.data));
-                    navigate("/dashboard");
+                    if (import.meta.env.VITE_IS_CRATES_UI) {
+                        navigate("/route-dashboard");
+                    } else {
+                        navigate("/dashboard");
+                    }
                     form.resetFields();
                 }
             })

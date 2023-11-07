@@ -25,7 +25,7 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
     if (import.meta.env.VITE_IS_CRATES_UI || false) {
         menuItems = [
             {
-                key: '/dashboard',
+                key: '/route-dashboard',
                 icon: <AreaChartOutlined style={{ fontSize: '1rem' }} />,
                 label: 'Dashboard',
             },
