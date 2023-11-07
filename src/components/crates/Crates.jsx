@@ -93,7 +93,7 @@ const Crates = () => {
             key: 'PCM'
         },
         {
-            title: 'Crate Name',
+            title: 'Route Name',
             dataIndex: 'Name',
             key: 'Name'
         },
