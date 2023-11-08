@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Popover, Dropdown, Menu } from 'antd';
+import { Button, Modal, Popover, Dropdown, Menu, List } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import api from '../../utils/api';
 import AddRouteForm from './AddRouteForm';
@@ -244,9 +244,15 @@ const Routes = () => {
                         <div>
                             {record.DeliveringItems && record.DeliveringItems.length > 0 ? (
                                 record.DeliveringItems.map((deliveringItem, index) => (
-                                    <div key={index}>
-                                        <strong>Customer:</strong> {deliveringItem.customerId.name}<br />
-                                        <strong>Count of Crates:</strong> {deliveringItem.crateIds.length}<br />
+                                    <div key={index} style={{margin: '10px'}}>
+                                        <span >Customer: {deliveringItem.customerId.name}</span><br />
+                                        <span >Count of Crates: {deliveringItem.crateIds.length}</span><br />
+                                        <div>
+                                            <span >Crate Names:</span>
+                                            {deliveringItem.crateIds.map((crate, idx) => (
+                                                <span  key={idx}>{crate.serialNumber}{idx !== deliveringItem.crateIds.length - 1 ? ', ' : ''}</span>
+                                            ))}
+                                        </div>
                                     </div>
                                 ))
                             ) : 'NA'}
