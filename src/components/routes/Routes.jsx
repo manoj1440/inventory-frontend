@@ -112,6 +112,20 @@ const Routes = () => {
             dataIndex: 'Name',
             key: 'Name',
         },
+        // {
+        //     title: 'Delivering Information',
+        //     key: 'DeliveringInformation',
+        //     render: (_, record) => (
+        //         record.DeliveringItems && record.DeliveringItems.length > 0 ?
+        //             record.DeliveringItems.map((deliveringItem, index) => (
+        //                 <div key={index}>
+        //                     <strong>Customer:</strong> {deliveringItem.customerId.name}<br />
+        //                     <strong>Count of Crates:</strong> {deliveringItem.crateIds.length}<br />
+        //                 </div>
+        //             ))
+        //             : 'NA'
+        //     )
+        // },
 
         {
             title: 'Total Crates',
@@ -173,7 +187,7 @@ const Routes = () => {
             render: (Dispatched) => Dispatched ? readableDate(Dispatched) : 'NA',
         },
         {
-            title: 'Customer',
+            title: 'Customers',
             key: 'Customers',
             dataIndex: 'Customers',
             render: (Customers) => Customers && Customers.length > 0 ? Customers.map(customer => customer.name).join(', ') : 'NA'
@@ -225,6 +239,21 @@ const Routes = () => {
                 data={routes}
                 columns={columns}
                 pagination={pagination}
+                expandable={{
+                    expandedRowRender: (record) => (
+                        <div>
+                            {record.DeliveringItems && record.DeliveringItems.length > 0 ? (
+                                record.DeliveringItems.map((deliveringItem, index) => (
+                                    <div key={index}>
+                                        <strong>Customer:</strong> {deliveringItem.customerId.name}<br />
+                                        <strong>Count of Crates:</strong> {deliveringItem.crateIds.length}<br />
+                                    </div>
+                                ))
+                            ) : 'NA'}
+                        </div>
+                    ),
+                    rowExpandable: (record) => record.DeliveringItems && record.DeliveringItems.length > 0,
+                }}
             />
             {editModalVisible && (
                 <EditRouteForm
