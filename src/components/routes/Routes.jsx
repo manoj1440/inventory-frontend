@@ -6,6 +6,7 @@ import AddRouteForm from './AddRouteForm';
 import EditRouteForm from './EditRouteForm';
 import dayjs from 'dayjs';
 import CustomTable from '../common/CustomTable';
+import AddNewRouteForm from './AddNewRouteForm';
 
 const Routes = () => {
     const [routes, setRoutes] = useState([]);
@@ -16,6 +17,7 @@ const Routes = () => {
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editRouteData, setEditRouteData] = useState({});
     const [isAddModal, setIsAddModal] = useState(false);
+    const [isAddNewModal, setIsAddNewModal] = useState(false);
 
     const fetchRoutes = async (page = pagination.current, pageSize = pagination.pageSize) => {
         try {
@@ -105,6 +107,12 @@ const Routes = () => {
             </Dropdown>
         );
     };
+
+    const handleAddNewDelivery = (record) => {
+        console.log('record=====', record);
+        setIsAddNewModal(true);
+        setEditRouteData(record);
+    }
 
     const columns = [
         {
@@ -199,6 +207,13 @@ const Routes = () => {
             render: (dispatchedBy) => dispatchedBy ? dispatchedBy.name : 'NA'
         },
         {
+            title: 'Add New Delivery',
+            render: (_, record) => <Button
+                onClick={() => handleAddNewDelivery(record)} type="primary">
+                Add New
+            </Button>,
+        },
+        {
             title: 'Actions',
             dataIndex: '_id',
             key: 'actions',
@@ -230,7 +245,7 @@ const Routes = () => {
                 onClick={() => setIsAddModal(true)}
                 type="primary"
             >
-                Add Route
+                Create Route
             </Button>
             <CustomTable
                 downloadButtonText="Export"
@@ -244,13 +259,13 @@ const Routes = () => {
                         <div>
                             {record.DeliveringItems && record.DeliveringItems.length > 0 ? (
                                 record.DeliveringItems.map((deliveringItem, index) => (
-                                    <div key={index} style={{margin: '10px'}}>
+                                    <div key={index} style={{ margin: '10px' }}>
                                         <span >Customer: {deliveringItem.customerId.name}</span><br />
                                         <span >Count of Crates: {deliveringItem.crateIds.length}</span><br />
                                         <div>
                                             <span >Crate Names:</span>
                                             {deliveringItem.crateIds.map((crate, idx) => (
-                                                <span  key={idx}>{crate.serialNumber}{idx !== deliveringItem.crateIds.length - 1 ? ', ' : ''}</span>
+                                                <span key={idx}>{crate.serialNumber}{idx !== deliveringItem.crateIds.length - 1 ? ', ' : ''}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -276,6 +291,14 @@ const Routes = () => {
                     fetchRoutes={fetchRoutes}
                 />
             )}
+
+            {isAddNewModal && (<AddNewRouteForm
+                editRouteData={editRouteData}
+                isAddModal={isAddNewModal}
+                setEditRouteData={setEditRouteData}
+                onCancel={() => setIsAddNewModal(false)}
+                fetchRoutes={fetchRoutes}
+            />)}
         </div>
     )
 };

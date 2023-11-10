@@ -30,6 +30,11 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
                 label: 'Dashboard',
             },
             {
+                key: '/old-routes',
+                icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
+                label: 'Old Routes',
+            },
+            {
                 key: '/routes',
                 icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
                 label: 'Routes',
