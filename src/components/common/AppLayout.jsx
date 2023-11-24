@@ -38,9 +38,8 @@ const AppLayout = () => {
     return (
         <Layout
             hasSider
-            style={{ height: '98vh' }}>
-
-
+            // style={{ height: '98vh' }}
+        >
             <AppSidebar setCollapsed={setCollapsed} collapsed={collapsed} />
             <Layout>
                 <AppHeader
