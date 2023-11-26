@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Popover, Dropdown, Menu, List } from 'antd';
-import { EllipsisOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, FileExcelOutlined } from '@ant-design/icons';
 import api from '../../utils/api';
+import * as XLSX from 'xlsx';
 import AddRouteForm from './AddRouteForm';
 import EditRouteForm from './EditRouteForm';
 import dayjs from 'dayjs';
@@ -238,6 +239,39 @@ const Routes = () => {
         });
     };
 
+    const handleExportExcel = () => {
+        if (routes && routes.length <= 0) {
+            message.error('There is no data to export');
+            return;
+        }
+        const tempRows = routes.map((r) => {
+            const rowObject = {};
+            Object.keys(r).forEach((key) => {
+                if (key === 'Name') {
+                    rowObject['Route Name'] = r['Name'];
+                }
+                if (key === 'Dispatched') {
+                    rowObject['Dispatched'] = r['Dispatched'];
+                }
+                if (key === 'dispatchedBy') {
+                    rowObject['Dispatched By'] = r['dispatchedBy']?.name;
+                }
+                if (key === 'Customers') {
+                    rowObject['Customers'] = r['Customers']?.map(item => item.name)?.join(' ,')
+                }
+                if (key === 'Crates') {
+                    rowObject['Crates'] = r['Crates']?.map(item => item.serialNumber)?.join(' ,');
+                }
+            });
+            return rowObject;
+        });
+        const worksheet = XLSX.utils.json_to_sheet(tempRows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Route Info');
+        XLSX.writeFile(workbook, `${'RouteInfo'}.xlsx`, { compression: true });
+    };
+
+
     return (
         <div>
             <Button
@@ -247,7 +281,18 @@ const Routes = () => {
             >
                 Create Route
             </Button>
+            <Button
+                icon={<FileExcelOutlined />}
+                style={{
+                    float: 'right',
+                    marginBottom: '10px'
+                }}
+                onClick={handleExportExcel}
+                type="primary">
+                Export
+            </Button>
             <CustomTable
+                isExport={false}
                 downloadButtonText="Export"
                 downloadFileName="Routes"
                 isFilter={false}

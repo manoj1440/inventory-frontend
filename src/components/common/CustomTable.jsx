@@ -4,6 +4,7 @@ import { FilterOutlined } from '@ant-design/icons';
 import ExcelExport from './ExcelExport';
 
 const CustomTable = ({
+    isExport = true,
     data,
     columns,
     downloadButtonText,
@@ -120,11 +121,11 @@ const CustomTable = ({
 
     return (
         <>
-            <ExcelExport
+            {isExport && < ExcelExport
                 data={filteredData}
                 buttonText={downloadButtonText}
                 fileName={downloadFileName}
-            />
+            />}
             <Table
                 {...(expandable && { expandable })}
                 dataSource={isFilter ? [...filteredData] : data}
