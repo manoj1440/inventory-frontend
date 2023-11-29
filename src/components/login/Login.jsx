@@ -28,7 +28,7 @@ const Login = () => {
                 if (response.status) {
                     localStorage.setItem('user', JSON.stringify(response.data));
                     if (import.meta.env.VITE_IS_CRATES_UI) {
-                        navigate("/route-dashboard");
+                        navigate("/routes");
                     } else {
                         navigate("/dashboard");
                     }

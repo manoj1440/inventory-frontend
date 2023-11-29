@@ -24,11 +24,11 @@ const AppSidebar = ({ collapsed, setCollapsed }) => {
 
     if (import.meta.env.VITE_IS_CRATES_UI || false) {
         menuItems = [
-            {
-                key: '/route-dashboard',
-                icon: <AreaChartOutlined style={{ fontSize: '1rem' }} />,
-                label: 'Dashboard',
-            },
+            // {
+            //     key: '/route-dashboard',
+            //     icon: <AreaChartOutlined style={{ fontSize: '1rem' }} />,
+            //     label: 'Dashboard',
+            // },
             {
                 key: '/old-routes',
                 icon: <GroupOutlined style={{ fontSize: '1rem' }} />,
