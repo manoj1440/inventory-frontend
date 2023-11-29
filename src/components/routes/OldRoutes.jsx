@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Table, Tag, Typography } from 'antd';
+import { Button, Space, Table, Tag, Typography } from 'antd';
+import * as XLSX from 'xlsx';
+
 import axios from 'axios';
 import api from '../../utils/api';
+import { FileExcelOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -68,10 +71,92 @@ const OldRoutes = () => {
         },
     ];
 
-    return <Table
-        dataSource={oldRoutes}
-        columns={columns}
-    />;
+    const handleExportExcel = () => {
+        if (oldRoutes && oldRoutes.length <= 0) {
+            message.error('There is no data to export');
+            return;
+        }
+
+        const data = transformData([...oldRoutes]);
+
+
+        console.log('data===', data);
+        console.log('oldRoutes===', oldRoutes);
+
+        const excludedKeys = [];
+
+        const tempRows = data.map((r) => {
+            const rowObject = {};
+            Object.keys(r).forEach((key) => {
+                if (!excludedKeys.includes(key)) {
+                    rowObject[key] = r[key];
+                }
+            });
+            return rowObject;
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(tempRows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Old Route Info');
+        XLSX.writeFile(workbook, `${'OldRouteInfo'}.xlsx`, { compression: true });
+    };
+
+    return (
+        <>
+            <Button
+                icon={<FileExcelOutlined />}
+                style={{
+                    float: 'right',
+                    marginBottom: '10px'
+                }}
+                onClick={handleExportExcel}
+                type="primary">
+                Export
+            </Button>
+            <Table
+                dataSource={oldRoutes}
+                columns={columns}
+            />
+        </>);
 };
 
+function transformData(data) {
+
+    const result = [];
+
+    data.forEach(depot => {
+
+        depot.DeliverdItems.forEach(delivery => {
+
+            delivery.DeliveringItems.forEach(dItem => {
+
+                const customer = delivery.Customers.find(c => c._id.toString() === dItem.customerId._id.toString());
+
+                let receivedCrates = 0;
+                dItem.crateIds.forEach(crateId => {
+                    const crate = delivery.Crates.find(c => c._id.toString() === crateId._id.toString());
+                    if (crate.received) {
+                        receivedCrates++;
+                    }
+                });
+
+                const item = {
+                    Name: delivery.Name,
+                    Dispatched: delivery.Dispatched,
+                    CustomerName: customer.name,
+                    TotalCrates: dItem.crateIds.length,
+                    ReceivedCrates: receivedCrates
+                };
+
+                result.push(item);
+
+            })
+
+        });
+
+    });
+
+    return result;
+
+}
 export default OldRoutes;
