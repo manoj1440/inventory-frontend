@@ -142,7 +142,7 @@ const Routes = () => {
             key: 'Crates',
             render: (_, record) => (
                 record.Crates && record.Crates.length > 0 ?
-                    <Popover
+                    <Popover overlayStyle={{ width: '30rem', maxHeight: '20rem', overflow: 'auto', border: '1px solid gray', zIndex: 1000, boxShadow: '10px 10px 5px lightgray' }}
                         content={record.Crates.map((panel) => panel.serialNumber).join(', ')}
                         trigger="hover"
                     >
@@ -157,7 +157,7 @@ const Routes = () => {
             key: 'Crates',
             render: (_, record) => (
                 record.Crates && record.Crates.length > 0 ?
-                    <Popover
+                    <Popover overlayStyle={{ width: '30rem', maxHeight: '20rem', overflow: 'auto', border: '1px solid gray', zIndex: 1000, boxShadow: '10px 10px 5px lightgray' }}
                         content={record.Crates.map((panel) => {
                             if (panel.received) {
                                 return panel.serialNumber
@@ -176,7 +176,7 @@ const Routes = () => {
             key: 'Crates',
             render: (_, record) => (
                 record.Crates && record.Crates.length > 0 ?
-                    <Popover
+                    <Popover overlayStyle={{ width: '30rem', maxHeight: '20rem', overflow: 'auto', border: '1px solid gray', zIndex: 1000, boxShadow: '10px 10px 5px lightgray' }}
                         content={record.Crates.map((panel) => {
                             if (!panel.received) {
                                 return panel.serialNumber
@@ -304,15 +304,26 @@ const Routes = () => {
                         <div>
                             {record.DeliveringItems && record.DeliveringItems.length > 0 ? (
                                 record.DeliveringItems.map((deliveringItem, index) => (
-                                    <div key={index} style={{ margin: '10px' }}>
-                                        <span >Customer: {deliveringItem.customerId.name}</span><br />
-                                        <span >Count of Crates: {deliveringItem.crateIds.length}</span><br />
+                                    <div key={index} style={{
+                                        margin: '10px', padding: '5px',
+                                        border: '1px solid gray'
+                                    }}>
+                                        <span ><strong>Customer: </strong>{deliveringItem.customerId.name}</span> 
+                                        <br />
+                                        <span ><strong>Count of Crates: </strong> {deliveringItem.crateIds.length}</span> 
+                                        <br />
                                         <div>
-                                            <span >Crate Names:</span>
-                                            {deliveringItem.crateIds.map((crate, idx) => (
+                                            <span ><strong>Received Crates ({deliveringItem.crateIds.filter(item => item.received).length}): </strong></span>
+                                            {deliveringItem.crateIds.filter(item => item.received).map((crate, idx) => (
+                                                <span key={idx}>{crate.serialNumber}{idx !== deliveringItem.crateIds.length - 1 ? ', ' : ''}</span>
+                                            ))}
+                                            <br />
+                                            <span ><strong>Pending Crates ({deliveringItem.crateIds.filter(item => !item.received).length}): </strong></span>
+                                            {deliveringItem.crateIds.filter(item => !item.received).map((crate, idx) => (
                                                 <span key={idx}>{crate.serialNumber}{idx !== deliveringItem.crateIds.length - 1 ? ', ' : ''}</span>
                                             ))}
                                         </div>
+                                        <div style={{ textDecoration: 'underline' }}> </div>
                                     </div>
                                 ))
                             ) : 'NA'}

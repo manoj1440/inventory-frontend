@@ -13,7 +13,9 @@ const CustomTable = ({
     isFilter = false,
     fetchData,
     totalRecords,
-    expandable
+    expandable,
+    onExpand,
+    expandedRowKeys
 }) => {
     const [columnFilters, setColumnFilters] = useState({});
     const [currentPagination, setCurrentPagination] = useState(pagination || {});
@@ -128,6 +130,8 @@ const CustomTable = ({
             />}
             <Table
                 {...(expandable && { expandable })}
+                {...(expandedRowKeys && { expandedRowKeys })}
+                {...(onExpand && { onExpand })}
                 dataSource={isFilter ? [...filteredData] : data}
                 columns={isFilter ? enhancedColumns : columns}
                 pagination={{ ...currentPagination, ...(totalRecords && { total: totalRecords }) }}
