@@ -114,8 +114,6 @@ const EditRouteForm = ({ onCancel, editModalVisible, editRouteData, fetchRoutes 
         setCrateList(updatedCrateList);
     }, [initialUserList, initialCrateList, deliveringItems]);
 
-
-
     return (
         <Modal
             title="Edit Route"
@@ -149,7 +147,7 @@ const EditRouteForm = ({ onCancel, editModalVisible, editRouteData, fetchRoutes 
                         <Select
                             onChange={(data) => setCurUser(data)}
                             value={curUser}
-                            style={{ width: '100%' }}
+                            style={{ width: '30%' }}
                             placeholder="Select customer"
                         >
                             {userList.map(item => (
@@ -161,7 +159,7 @@ const EditRouteForm = ({ onCancel, editModalVisible, editRouteData, fetchRoutes 
                         <Select mode="tags"
                             onChange={(data) => setCurCrate(data)}
                             value={curCrate}
-                            style={{ width: '100%' }} placeholder="Select or type crates">
+                            style={{ width: '50%' }} placeholder="Select or type crates">
                             {crateList.map(item => <Select.Option key={item._id} value={item._id}>{item.serialNumber}</Select.Option>)}
                         </Select>
                         <Button type="primary" onClick={handleAddItems} >

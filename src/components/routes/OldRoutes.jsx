@@ -50,7 +50,7 @@ const OldRoutes = () => {
                 return deliverdItems.map((item, index) => (
                     <Space key={index} direction="vertical">
                         <div style={{ margin: '10px', border: '1px solid gray', padding: '5px' }}>
-                            <Text strong>{`Dispatched: ${new Date().toDateString(item.Dispatched)}`}</Text>
+                            <Text strong>{`Dispatched: ${ item.Dispatched ? new Date(item.Dispatched).toDateString() : new Date().toDateString()}`}</Text>
                             <div>
                                 <div>
                                     {item.DeliveringItems.map((deliveringItem, idx) => {
